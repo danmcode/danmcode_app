@@ -19,7 +19,7 @@ function registerControllerRoutes(routes: RouteDefinition[]): Router {
                 controllerRouter.get(route.path, route.handler);
                 break;
             case 'post':
-                controllerRouter.post(route.path, route.handler);
+                controllerRouter.post(route.path, route.validator!, route.handler);
                 break;
             case 'put':
                 controllerRouter.put(route.path, route.handler);
