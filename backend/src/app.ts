@@ -50,16 +50,6 @@ export default class App {
 		this.express.use(cors(corsOptions));
 	}
 
-	private parseRequestHeader(
-		_req: Request,
-		_res: Response,
-		next: NextFunction,
-	): void {
-		// parse request header
-		// console.log(req.headers.access_token);
-		next();
-	}
-
 	private basePathRoute(_request: Request, response: Response): void {
 		response.json({ message: 'base path' });
 	}

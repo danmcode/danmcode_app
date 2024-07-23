@@ -2,6 +2,7 @@ import { Router } from 'express';
 import RoleController from './components/role/role.controller';
 import { RouteDefinition } from './types/route.definition';
 import logger from './lib/logger';
+import UserController from './components/user/user.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -43,6 +44,7 @@ export default function registerRoutes(): Router {
 
         const controllers = [
             new RoleController(),
+            new UserController(),
         ];
 
         controllers.forEach((controller) => {
