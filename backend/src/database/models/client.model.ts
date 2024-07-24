@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { ClientType } from './client.type.model';
+import { User } from './user.model';
 
 interface ClientAttributes {
     id: string;
@@ -107,6 +108,16 @@ Client.init(
 Client.belongsTo(ClientType, {
     foreignKey: 'client_type_id',
     as: 'client_type',
+});
+
+Client.belongsTo(User, {
+    foreignKey: 'created_by',
+    as: 'client_created_by',
+});
+
+Client.belongsTo(User, {
+    foreignKey: 'updated_by',
+    as: 'client_updated_by',
 });
 
 export { Client, ClientAttributes, ClientCreationAttributes };

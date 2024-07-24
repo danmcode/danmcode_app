@@ -1,7 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
-import bcrypt from 'bcrypt';
 import { Client, ClientAttributes, ClientCreationAttributes } from "../../database/models/client.model";
 import { ClientType } from "../../database/models/client.type.model";
 
@@ -32,7 +31,9 @@ export class ClientService {
 
     async findOne(id: string): Promise<Client> {
         try {
-            const client = await Client.findByPk(id);
+            const client = await Client.findByPk(id, {
+                include: [{ model: ClientType, as: 'client_type' }]
+            });
             return client!;
         } catch (error) {
             logger.error(error);
