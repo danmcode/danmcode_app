@@ -9,7 +9,13 @@ const validateIdentification = (isOptional = false) => {
         .isLength({ min: 6 })
         .withMessage(ValidationUserMessages.IdentificationMinLength)
         .isLength({ max: 12 })
-        .withMessage(ValidationUserMessages.IdentificationMaxLength);
+        .withMessage(ValidationUserMessages.IdentificationMaxLength)
+        .custom(async (value) => {
+            const user = await User.findOne({ where: { identification: value } });
+            if (user) {
+                return Promise.reject(ValidationUserMessages.IdentificationInUse);
+            }
+        });
     return isOptional
         ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.IdentificationRequired);
@@ -45,7 +51,13 @@ const validateUsername = (isOptional = false) => {
         .isLength({ min: 3 })
         .withMessage(ValidationUserMessages.UsernameMinLength)
         .isLength({ max: 20 })
-        .withMessage(ValidationUserMessages.UsernameMaxLength);
+        .withMessage(ValidationUserMessages.UsernameMaxLength)
+        .custom(async (value) => {
+            const user = await User.findOne({ where: { username: value } });
+            if (user) {
+                return Promise.reject(ValidationUserMessages.UsernameInUse);
+            }
+        });
     return isOptional
         ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.UsernameRequired);
@@ -55,7 +67,13 @@ const validateEmail = (isOptional = false) => {
     const validator = body('email')
         .trim()
         .isEmail()
-        .withMessage(ValidationUserMessages.EmailInvalid);
+        .withMessage(ValidationUserMessages.EmailInvalid)
+        .custom(async (value) => {
+            const user = await User.findOne({ where: { email: value } });
+            if (user) {
+                return Promise.reject(ValidationUserMessages.EmailInUse);
+            }
+        });
     return isOptional
         ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.EmailRequired);
