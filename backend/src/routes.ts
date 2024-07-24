@@ -3,6 +3,7 @@ import RoleController from './components/role/role.controller';
 import { RouteDefinition } from './types/route.definition';
 import logger from './lib/logger';
 import UserController from './components/user/user.controller';
+import ClientTypeController from './components/client.type/client.type.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -22,15 +23,6 @@ function registerControllerRoutes(routes: RouteDefinition[]): Router {
             case 'post':
                 controllerRouter.post(route.path, route.validator!, route.handler);
                 break;
-            case 'put':
-                controllerRouter.put(route.path, route.handler);
-                break;
-            case 'patch':
-                controllerRouter.put(route.path, route.handler);
-                break;
-            case 'delete':
-                controllerRouter.delete(route.path, route.handler);
-                break;
             default:
                 throw new Error(`Unsupported HTTP method: ${route.method}`);
         }
@@ -45,6 +37,7 @@ export default function registerRoutes(): Router {
         const controllers = [
             new RoleController(),
             new UserController(),
+            new ClientTypeController(),
         ];
 
         controllers.forEach((controller) => {

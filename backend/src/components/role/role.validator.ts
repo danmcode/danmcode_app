@@ -35,7 +35,7 @@ const validateDescription = (isOptional = false) => {
 };
 
 const validateRoleId = () => {
-    return param('id')
+    return body('role_id')
         .not().isEmpty()
         .withMessage(ValidationMessages.RoleIdRequired)
         .custom(async (value) => {
