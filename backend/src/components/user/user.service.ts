@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
 import { User, UserAttributes, UserCreationAttributes } from "../../database/models/user.model";
+import { Role } from "../../database/models/role.model";
 
 export class UserService {
 
@@ -17,7 +18,10 @@ export class UserService {
 
     async find() {
         try {
-            const user = await User.findAll({ where: { is_active: true } });
+            const user = await User.findAll({ 
+                where: { is_active: true }, 
+                include: [{ model: Role, as: 'role' }]
+            });
             return user;
         } catch (error) {
             logger.error(error);
@@ -55,7 +59,7 @@ export class UserService {
         try {
             const user = await User.findByPk(id);
 
-            if(user){
+            if (user) {
                 user.is_active = false;
                 await user.save();
                 return true;
@@ -69,7 +73,7 @@ export class UserService {
         }
     }
 
-    async search(query: any): Promise<User[]>{
+    async search(query: any): Promise<User[]> {
         try {
             const users = await User.findAll({ where: query });
             return users;

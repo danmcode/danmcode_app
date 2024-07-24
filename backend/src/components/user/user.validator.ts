@@ -10,8 +10,8 @@ const validateIdentification = (isOptional = false) => {
         .withMessage(ValidationUserMessages.IdentificationMinLength)
         .isLength({ max: 12 })
         .withMessage(ValidationUserMessages.IdentificationMaxLength);
-    return isOptional 
-        ? validator.optional() 
+    return isOptional
+        ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.IdentificationRequired);
 };
 
@@ -22,8 +22,8 @@ const validateName = (isOptional = false) => {
         .withMessage(ValidationUserMessages.NameMinLength)
         .isLength({ max: 50 })
         .withMessage(ValidationUserMessages.NameMaxLength);
-    return isOptional 
-        ? validator.optional() 
+    return isOptional
+        ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.NameRequired);
 };
 
@@ -34,8 +34,8 @@ const validateLastName = (isOptional = false) => {
         .withMessage(ValidationUserMessages.LastNameMinLength)
         .isLength({ max: 50 })
         .withMessage(ValidationUserMessages.LastNameMaxLength);
-    return isOptional 
-        ? validator.optional() 
+    return isOptional
+        ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.LastNameRequired);
 };
 
@@ -46,8 +46,8 @@ const validateUsername = (isOptional = false) => {
         .withMessage(ValidationUserMessages.UsernameMinLength)
         .isLength({ max: 20 })
         .withMessage(ValidationUserMessages.UsernameMaxLength);
-    return isOptional 
-        ? validator.optional() 
+    return isOptional
+        ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.UsernameRequired);
 };
 
@@ -56,8 +56,8 @@ const validateEmail = (isOptional = false) => {
         .trim()
         .isEmail()
         .withMessage(ValidationUserMessages.EmailInvalid);
-    return isOptional 
-        ? validator.optional() 
+    return isOptional
+        ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.EmailRequired);
 };
 
@@ -66,13 +66,13 @@ const validatePassword = (isOptional = false) => {
         .trim()
         .isLength({ min: 8 })
         .withMessage(ValidationUserMessages.PasswordMinLength);
-    return isOptional 
-        ? validator.optional() 
+    return isOptional
+        ? validator.optional()
         : validator.not().isEmpty().withMessage(ValidationUserMessages.PasswordRequired);
 };
 
 const validateRoleId = (isOptional = false) => {
-    return body('rol_id')
+    return body('role_id')
         .not().isEmpty()
         .withMessage(ValidationUserMessages.RoleIdRequired)
         .custom(async (value) => {

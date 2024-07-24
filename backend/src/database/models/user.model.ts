@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
+import { Role } from './role.model';
 
 interface UserAttributes {
     id: string;
@@ -15,7 +16,7 @@ interface UserAttributes {
     is_contact: boolean;
     token: string;
     contact_id: string;
-    rol_id: string;
+    role_id: string;
     is_blocked: string;
     first_login: boolean;
 }
@@ -36,7 +37,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     is_contact!: boolean;
     token!: string;
     contact_id!: string;
-    rol_id!: string;
+    role_id!: string;
     is_blocked!: string;
     first_login!: boolean;
 
@@ -117,8 +118,8 @@ User.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        rol_id: {
-            type: DataTypes.STRING,
+        role_id: {
+            type: DataTypes.UUID,
             allowNull: false,
         },
     },
@@ -130,5 +131,10 @@ User.init(
         underscored: true
     }
 );
+
+User.belongsTo(Role, {
+    foreignKey: 'role_id',
+    as: 'role',
+});
 
 export { User, UserAttributes, UserCreationAttributes };
