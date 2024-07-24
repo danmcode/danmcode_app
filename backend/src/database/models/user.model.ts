@@ -51,39 +51,43 @@ User.init(
             allowNull: false,
             primaryKey: true,
             type: DataTypes.UUID,
-            defaultValue: UUIDV4
+            defaultValue: UUIDV4,
+            unique: true,
         },
         identification: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(12),
             allowNull: false,
+            unique: true,
         },
         name: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(50),
             allowNull: false,
         },
         last_name: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(50),
             allowNull: false,
         },
         username: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(20),
             allowNull: false,
+            unique: true,
         },
         email: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(100),
             allowNull: false,
-        },
-        email_verified: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        email_verified_at: {
-            type: DataTypes.STRING,
-            allowNull: true,
+            unique: true,
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        email_verified_at: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        email_verified: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
         },
         is_active: {
             type: DataTypes.BOOLEAN,
@@ -93,10 +97,17 @@ User.init(
         is_contact: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: false,
+        },
+        is_blocked: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: false,
         },
         first_login: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: false
         },
         token: {
             type: DataTypes.STRING,
@@ -109,10 +120,6 @@ User.init(
         rol_id: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        is_blocked: {
-            type: DataTypes.STRING,
-            allowNull: true,
         },
     },
     {

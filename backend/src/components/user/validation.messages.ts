@@ -13,8 +13,10 @@ export enum ValidationUserMessages {
     
     UsernameRequired = 'El nombre de usuario es requerido',
     UsernameMinLength = 'El nombre de usuario debe tener al menos 3 caracteres',
-    UsernameMaxLength = 'El nombre de usuario debe tener menos de 30 caracteres',
+    UsernameMaxLength = 'El nombre de usuario debe tener menos de 20 caracteres',
     
+    EmailMinLength = 'El correo debe ser de al menos 3 caracteres',
+    EmailMaxLength = 'El correo electrónico debe tener menos de 100 caracteres',
     EmailRequired = 'El correo electrónico es requerido',
     EmailInvalid = 'El correo electrónico no es válido',
     

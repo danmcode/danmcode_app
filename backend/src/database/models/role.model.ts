@@ -30,11 +30,11 @@ Role.init({
         defaultValue: UUIDV4
     },
     role_name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(50),
         allowNull: false
     },
     description: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(200),
         allowNull: false
     },
     is_active: {

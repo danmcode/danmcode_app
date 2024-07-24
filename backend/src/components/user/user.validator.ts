@@ -44,7 +44,7 @@ const validateUsername = (isOptional = false) => {
         .trim()
         .isLength({ min: 3 })
         .withMessage(ValidationUserMessages.UsernameMinLength)
-        .isLength({ max: 30 })
+        .isLength({ max: 20 })
         .withMessage(ValidationUserMessages.UsernameMaxLength);
     return isOptional 
         ? validator.optional() 
