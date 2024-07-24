@@ -2,20 +2,20 @@ import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
 
-interface IdentificationTypeAttributes {
+interface LocationTypeAttributes {
     id: string;
-    identification_type: string;
+    location_type: string;
     description: string;
     is_active: boolean;
     created_by: string;
     updated_by: string;
 }
 
-interface IdentificationTypeCreationAttributes extends Optional<IdentificationTypeAttributes, 'id' | 'is_active'> { }
+interface LocationTypeCreationAttributes extends Optional<LocationTypeAttributes, 'id' | 'is_active'> { }
 
-class IdentificationType extends Model<IdentificationTypeAttributes, IdentificationTypeCreationAttributes> implements IdentificationTypeAttributes {
+class LocationType extends Model<LocationTypeAttributes, LocationTypeCreationAttributes> implements LocationTypeAttributes {
     public id!: string;
-    public identification_type!: string;
+    public location_type!: string;
     public description!: string;
     public is_active!: boolean;
     public created_by!: string;
@@ -26,14 +26,14 @@ class IdentificationType extends Model<IdentificationTypeAttributes, Identificat
 }
 
 
-IdentificationType.init({
+LocationType.init({
     id: {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: UUIDV4
     },
-    identification_type: {
+    location_type: {
         type: DataTypes.STRING(50),
         allowNull: false
     },
@@ -55,20 +55,20 @@ IdentificationType.init({
     },
 }, {
     sequelize,
-    tableName: 'identification_types',
-    modelName: 'IdentificationType',
+    tableName: 'location_types',
+    modelName: 'LocationType',
     timestamps: true,
     underscored: true
 });
 
-IdentificationType.belongsTo(User, {
+LocationType.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'identification_type_created_by',
+    as: 'location_type_created_by',
 });
 
-IdentificationType.belongsTo(User, {
+LocationType.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'identification_type_updated_by',
+    as: 'location_type_updated_by',
 });
 
-export { IdentificationType, IdentificationTypeAttributes, IdentificationTypeCreationAttributes };
+export { LocationType, LocationTypeAttributes, LocationTypeCreationAttributes };
