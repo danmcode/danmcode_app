@@ -72,7 +72,7 @@ const validatePassword = (isOptional = false) => {
 };
 
 const validateRoleId = (isOptional = false) => {
-    return body('role_id')
+    const validator = body('role_id')
         .not().isEmpty()
         .withMessage(ValidationUserMessages.RoleIdRequired)
         .custom(async (value) => {
@@ -81,10 +81,13 @@ const validateRoleId = (isOptional = false) => {
                 return Promise.reject(ValidationUserMessages.RoleNotFound);
             }
         });
+    return isOptional
+        ? validator.optional()
+        : validator.not().isEmpty().withMessage(ValidationUserMessages.RoleIdRequired);
 };
 
 const validateUserId = () => {
-    return param('id')
+    return body('user_id')
         .not().isEmpty()
         .withMessage(ValidationUserMessages.UserIdRequired)
         .custom(async (value) => {

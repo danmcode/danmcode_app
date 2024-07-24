@@ -3,11 +3,17 @@ import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
 import { User, UserAttributes, UserCreationAttributes } from "../../database/models/user.model";
 import { Role } from "../../database/models/role.model";
+import bcrypt from 'bcrypt';
 
 export class UserService {
 
     async create(payload: UserCreationAttributes): Promise<UserAttributes> {
         try {
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(payload.password, saltRounds);
+
+            payload.password = hashedPassword;
+
             const user = await User.create(payload);
             return user;
         } catch (error) {
@@ -18,8 +24,8 @@ export class UserService {
 
     async find() {
         try {
-            const user = await User.findAll({ 
-                where: { is_active: true }, 
+            const user = await User.findAll({
+                where: { is_active: true },
                 include: [{ model: Role, as: 'role' }]
             });
             return user;
@@ -50,7 +56,7 @@ export class UserService {
             return updatedUser;
 
         } catch (error) {
-            logger.error({ error, 'updated': 'update user' });
+            logger.error({ error });
             throw error
         }
     }
@@ -81,6 +87,10 @@ export class UserService {
             logger.error(error);
             throw error
         }
+    }
+
+    static async verifyPassword(user: User, plainPassword: string): Promise<boolean> {
+        return bcrypt.compare(plainPassword, user.password);
     }
 
 }

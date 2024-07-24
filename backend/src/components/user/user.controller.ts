@@ -100,7 +100,7 @@ export default class UserController extends BaseController {
         } catch (error) {
 
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'user.contuserr.ts' });
+            logger.error({ error });
             return super.send(res, StatusCodes.BAD_REQUEST);
 
         }
@@ -126,9 +126,8 @@ export default class UserController extends BaseController {
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
-
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'user.contuserr.ts' });
+            logger.error({ error });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
