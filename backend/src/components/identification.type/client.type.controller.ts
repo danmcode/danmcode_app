@@ -4,28 +4,28 @@ import BaseController from '../base.controller';
 import { validationResult } from 'express-validator';
 import logger from '../../lib/logger';
 import { Op } from 'sequelize';
+import { ClientTypeService } from './client.type.service';
 import { RouteDefinition } from '../../types/route.definition';
-import { IdentificationTypeAttributes } from '../../database/models/identification.type';
-import { IdentificationTypeService } from '../identification.type/client.type.service';
-import { createIdentificationTypeValidator, getIdentificationTypeValidator, searchValidator, updateIdentificationTypeValidator } from '../identification.type/client.type.validator';
+import { ClientTypeAttributes } from '../../database/models/client.type.model';
+import { createClientTypeValidator, getClientTypeValidator, searchValidator, updateClientTypeValidator } from './client.type.validator';
 
-export default class IdentificationTypeController extends BaseController {
+export default class ClientTypeController extends BaseController {
 
-    private identificationType: IdentificationTypeService;
-    public basePath = 'identification-types';
+    private clientType: ClientTypeService;
+    public basePath = 'client-types';
 
     constructor() {
         super();
-        this.identificationType = new IdentificationTypeService();
+        this.clientType = new ClientTypeService();
     }
 
     public routes(): RouteDefinition[] {
         return [
-            { path: '/', method: 'post', handler: this.createIdentificationType.bind(this), validator: createIdentificationTypeValidator() },
-            { path: '/', method: 'get', handler: this.getIdentificationTypes.bind(this) },
-            { path: '/get-identification-type', method: 'post', handler: this.getIdentificationType.bind(this), validator: getIdentificationTypeValidator() },
-            { path: '/update', method: 'post', handler: this.updateIdentificationType.bind(this), validator: updateIdentificationTypeValidator() },
-            { path: '/delete', method: 'post', handler: this.delete.bind(this), validator: getIdentificationTypeValidator() },
+            { path: '/', method: 'post', handler: this.createClientType.bind(this), validator: createClientTypeValidator() },
+            { path: '/', method: 'get', handler: this.getClientTypes.bind(this) },
+            { path: '/get-client-type', method: 'post', handler: this.getClientType.bind(this), validator: getClientTypeValidator() },
+            { path: '/update', method: 'post', handler: this.updateClientType.bind(this), validator: updateClientTypeValidator() },
+            { path: '/delete', method: 'post', handler: this.delete.bind(this), validator: getClientTypeValidator() },
             { path: '/search', method: 'post', handler: this.search.bind(this), validator: searchValidator()},
         ];
     }
@@ -34,7 +34,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async createIdentificationType(req: Request, res: Response): Promise<void> {
+    public async createClientType(req: Request, res: Response): Promise<void> {
         try {
 
             let errors = validationResult(req);
@@ -45,10 +45,10 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType: IdentificationTypeAttributes = await this.identificationType.create(req.body);
+            const clientType: ClientTypeAttributes = await this.clientType.create(req.body);
 
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            res.locals.data = { clientType };
+            logger.info(clientType);
             return super.send(res, StatusCodes.CREATED);
 
         } catch (error) {
@@ -62,11 +62,11 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async getIdentificationTypes(_: Request, res: Response): Promise<void> {
+    public async getClientTypes(_: Request, res: Response): Promise<void> {
         try {
 
-            const identificationTypes = await this.identificationType.find();
-            res.locals.data = { identificationTypes };
+            const clientTypes = await this.clientType.find();
+            res.locals.data = { clientTypes };
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
@@ -82,7 +82,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async getIdentificationType(req: Request, res: Response): Promise<void> {
+    public async getClientType(req: Request, res: Response): Promise<void> {
         try {
             let errors = validationResult(req);
 
@@ -92,15 +92,15 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType = await this.identificationType.findOne(req.body.identification_type_id);
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            const clientType = await this.clientType.findOne(req.body.client_type_id);
+            res.locals.data = { clientType };
+            logger.info(clientType);
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
 
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'clientType.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
 
         }
@@ -110,7 +110,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async updateIdentificationType(req: Request, res: Response): Promise<void> {
+    public async updateClientType(req: Request, res: Response): Promise<void> {
         try {
             let errors = validationResult(req);
 
@@ -120,15 +120,15 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType = await this.identificationType.update(req.body.identification_type_id, req.body);
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            const clientType = await this.clientType.update(req.body.client_type_id, req.body);
+            res.locals.data = { clientType };
+            logger.info(clientType);
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
 
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'clientType.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
@@ -149,19 +149,19 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const id = req.body.identification_type_id;
-            const status: boolean = await this.identificationType.delete(id);
+            const id = req.body.client_type_id;
+            const status: boolean = await this.clientType.delete(id);
 
             res.locals.data = {
                 status,
-                'msg': `Tipo de identificatione con id: ${id}, eliminado`
+                'msg': `Tipo de cliente con id: ${id}, eliminado`
             };
 
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'clientType.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
@@ -183,15 +183,15 @@ export default class IdentificationTypeController extends BaseController {
                 }
             }
 
-            const identificationTypes = await this.identificationType.search(conditions);
-            res.locals.data = { identificationTypes };
-            logger.info(identificationTypes);
+            const clientTypes = await this.clientType.search(conditions);
+            res.locals.data = { clientTypes };
+            logger.info(clientTypes);
 
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'clientType.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
