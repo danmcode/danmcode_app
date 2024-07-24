@@ -6,6 +6,7 @@ import UserController from './components/user/user.controller';
 import ClientTypeController from './components/client.type/client.type.controller';
 import ClientController from './components/client/client.controller';
 import IdentificationTypeController from './components/client.type/client.type.controller';
+import LocationTypeController from './components/location.type/client.type.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -41,7 +42,8 @@ export default function registerRoutes(): Router {
             new UserController(),
             new ClientTypeController(),
             new ClientController(),
-            new IdentificationTypeController()
+            new IdentificationTypeController(),
+            new LocationTypeController()
         ];
 
         controllers.forEach((controller) => {

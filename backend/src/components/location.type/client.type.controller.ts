@@ -7,6 +7,7 @@ import { Op } from 'sequelize';
 import { RouteDefinition } from '../../types/route.definition';
 import { LocationTypeService } from './location.type.service';
 import { createLocationTypeValidator, getLocationTypeValidator, searchValidator, updateLocationTypeValidator } from './location.type.validator';
+import { LocationTypeAttributes } from '../../database/models/location.type';
 
 export default class LocationTypeController extends BaseController {
 
