@@ -6,8 +6,8 @@ import UserController from './components/user/user.controller';
 import ClientTypeController from './components/client.type/client.type.controller';
 import ClientController from './components/client/client.controller';
 import IdentificationTypeController from './components/client.type/client.type.controller';
-import LocationTypeController from './components/location.type/client.type.controller';
-import LocationController from './components/location/client.type.controller';
+import LocationController from './components/location/location.controller';
+import LocationTypeController from './components/location.type/location.type.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and

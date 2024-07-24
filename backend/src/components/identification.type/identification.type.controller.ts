@@ -5,9 +5,9 @@ import { validationResult } from 'express-validator';
 import logger from '../../lib/logger';
 import { Op } from 'sequelize';
 import { RouteDefinition } from '../../types/route.definition';
+import { IdentificationTypeService } from './identification.type.service';
+import { createIdentificationTypeValidator, getIdentificationTypeValidator, searchValidator, updateIdentificationTypeValidator } from './identification.type.validator';
 import { IdentificationTypeAttributes } from '../../database/models/identification.type';
-import { IdentificationTypeService } from '../identification.type/identification.type.service';
-import { createIdentificationTypeValidator, getIdentificationTypeValidator, searchValidator, updateIdentificationTypeValidator } from '../identification.type/identification.type.validator';
 
 export default class IdentificationTypeController extends BaseController {
 
