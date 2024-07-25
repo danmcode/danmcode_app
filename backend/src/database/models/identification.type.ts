@@ -11,6 +11,7 @@ interface IdentificationTypeAttributes {
     updated_by: string;
 }
 
+
 interface IdentificationTypeCreationAttributes extends Optional<IdentificationTypeAttributes, 'id' | 'is_active'> { }
 
 class IdentificationType extends Model<IdentificationTypeAttributes, IdentificationTypeCreationAttributes> implements IdentificationTypeAttributes {
@@ -31,11 +32,13 @@ IdentificationType.init({
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
-        defaultValue: UUIDV4
+        defaultValue: UUIDV4,
+        unique: true,
     },
     identification_type: {
         type: DataTypes.STRING(50),
-        allowNull: false
+        allowNull: false,
+        unique: true,
     },
     description: {
         type: DataTypes.STRING(200),

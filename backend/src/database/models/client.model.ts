@@ -42,8 +42,8 @@ class Client extends Model<ClientAttributes, ClientCreationAttributes> implement
 Client.init(
     {
         id: {
-            allowNull: false,
             primaryKey: true,
+            allowNull: false,
             type: DataTypes.UUID,
             defaultValue: UUIDV4,
             unique: true,
@@ -67,7 +67,7 @@ Client.init(
             allowNull: false,
         },
         photo_path: {
-            type: DataTypes.STRING(11),
+            type: DataTypes.STRING(200),
             allowNull: true,
         },
         contact_email: {
@@ -104,6 +104,7 @@ Client.init(
         underscored: true
     }
 );
+
 
 Client.belongsTo(ClientType, {
     foreignKey: 'client_type_id',

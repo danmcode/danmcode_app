@@ -22,6 +22,7 @@ class Role extends Model<RoleAttributes, RoleCreationAttributes> implements Role
 }
 
 
+
 Role.init({
     id: {
         allowNull: false,
