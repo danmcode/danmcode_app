@@ -8,6 +8,8 @@ import ClientController from './components/client/client.controller';
 import IdentificationTypeController from './components/client.type/client.type.controller';
 import LocationController from './components/location/location.controller';
 import LocationTypeController from './components/location.type/location.type.controller';
+import SubLocationController from './components/sub.location/sub.location.controller';
+import ContactTypeController from './components/contact.type/contact.type.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -46,6 +48,8 @@ export default function registerRoutes(): Router {
             new IdentificationTypeController(),
             new LocationTypeController(),
             new LocationController(),
+            new SubLocationController(),
+            new ContactTypeController(),
         ];
 
         controllers.forEach((controller) => {
