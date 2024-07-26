@@ -3,9 +3,9 @@ import sequelize from '../index';
 import { User } from './user.model';
 import { Client } from './client.model';
 import { ContactType } from './contact.type';
-import { ResidentType } from './resident.type copy';
 import { JobTitle } from './job.titles.model';
 import { SubLocation } from './sub.location';
+import { ResidentType } from './resident.type';
 
 interface ContactAttributes {
     id: string;
@@ -134,12 +134,12 @@ Contact.belongsTo(SubLocation, {
 
 Contact.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'location_created_by',
+    as: 'contact_created_by',
 });
 
 Contact.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'location_updated_by',
+    as: 'contact_updated_by',
 });
 
 export { Contact, ContactAttributes, ContactCreationAttributes };

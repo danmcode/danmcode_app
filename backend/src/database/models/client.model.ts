@@ -105,7 +105,6 @@ Client.init(
     }
 );
 
-
 Client.belongsTo(ClientType, {
     foreignKey: 'client_type_id',
     as: 'client_type',
