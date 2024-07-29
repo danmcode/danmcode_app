@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
+import { IdentificationType } from './identification.type';
 
 interface VisitorAttributes {
     id: string;
@@ -11,7 +12,6 @@ interface VisitorAttributes {
     photo_path: string;
     phone_number: string;
     visitor_card_number: string;
-    descripcion: string;
     description: string;
     is_active: boolean;
     created_by: string;
@@ -29,7 +29,6 @@ class Visitor extends Model<VisitorAttributes, VisitorCreationAttributes> implem
     public photo_path!: string;
     public phone_number!: string;
     public visitor_card_number!: string;
-    public descripcion!: string;
     public description!: string;
     public is_active!: boolean;
     public created_by!: string;
@@ -47,7 +46,34 @@ Visitor.init({
         type: DataTypes.UUID,
         defaultValue: UUIDV4
     },
-
+    identification_type_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+    },
+    identification: {
+        type: DataTypes.STRING(12),
+        allowNull: false,
+    },
+    name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+    },
+    last_name: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+    },
+    photo_path: {
+        type: DataTypes.STRING(200),
+        allowNull: true,
+    },
+    phone_number: {
+        type: DataTypes.STRING(12),
+        allowNull: true,
+    },
+    visitor_card_number: {
+        type: DataTypes.STRING(5),
+        allowNull: true
+    },
     description: {
         type: DataTypes.STRING(200),
         allowNull: false
@@ -66,20 +92,26 @@ Visitor.init({
     },
 }, {
     sequelize,
-    tableName: 'visitor_type_ids',
+    tableName: 'visitors',
     modelName: 'Visitor',
     timestamps: true,
     underscored: true
 });
 
+
+Visitor.belongsTo(IdentificationType , {
+    foreignKey: 'identification_type_id',
+    as: 'identification_type'
+})
+
 Visitor.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'visitor_type_id_created_by',
+    as: 'visitor_created_by',
 });
 
 Visitor.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'visitor_type_id_updated_by',
+    as: 'visitor_updated_by',
 });
 
 export { Visitor, VisitorAttributes, VisitorCreationAttributes };
