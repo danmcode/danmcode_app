@@ -8,8 +8,8 @@ export class DropDownListService {
 
     async create(payload: DropDownListCreationAttributes): Promise<DropDownListAttributes> {
         try {
-            const clientType = await DropDownList.create(payload);
-            return clientType;
+            const dropdownList = await DropDownList.create(payload);
+            return dropdownList;
         } catch (error) {
             logger.error(error);
             throw error;
@@ -18,11 +18,11 @@ export class DropDownListService {
 
     async find() {
         try {
-            const clientTypes = await DropDownList.findAll({ 
+            const dropdownLists = await DropDownList.findAll({ 
                 where: { is_active: true },
                 include: [{ model: DropDownListItem, as: 'dropdown_list_items' }]
             });
-            return clientTypes;
+            return dropdownLists;
         } catch (error) {
             logger.error(error);
             throw error
@@ -31,8 +31,10 @@ export class DropDownListService {
 
     async findOne(id: string): Promise<DropDownList> {
         try {
-            const clientType = await DropDownList.findByPk(id);
-            return clientType!;
+            const dropdownList = await DropDownList.findByPk(id, {
+                include: [{ model: DropDownListItem, as: 'dropdown_list_items' }]
+            });
+            return dropdownList!;
         } catch (error) {
             logger.error(error);
             throw new ApiError(`Id: ${id} No encontrado`, StatusCodes.NOT_FOUND);
@@ -41,27 +43,27 @@ export class DropDownListService {
 
     async update(id: string, payload: DropDownListCreationAttributes): Promise<DropDownList> {
         try {
-            const clientType = await DropDownList.findByPk(id);
-            if (!clientType) {
+            const dropdownList = await DropDownList.findByPk(id);
+            if (!dropdownList) {
                 throw new ApiError('Lista no encontrada', StatusCodes.NOT_FOUND);
             }
 
-            const updatedRol = await clientType!.update(payload);
+            const updatedRol = await dropdownList!.update(payload);
             return updatedRol;
 
         } catch (error) {
-            logger.error({ error, 'updated': 'update clientType' });
+            logger.error({ error, 'updated': 'update dropdownList' });
             throw error
         }
     }
 
     async delete(id: string): Promise<boolean> {
         try {
-            const clientType = await DropDownList.findByPk(id);
-            console.log(clientType);
-            if (clientType) {
-                clientType.is_active = false;
-                await clientType.save();
+            const dropdownList = await DropDownList.findByPk(id);
+            console.log(dropdownList);
+            if (dropdownList) {
+                dropdownList.is_active = false;
+                await dropdownList.save();
                 return true;
             }
 
@@ -75,8 +77,11 @@ export class DropDownListService {
 
     async search(query: any): Promise<DropDownList[]> {
         try {
-            const clientTypes = await DropDownList.findAll({ where: query });
-            return clientTypes;
+            const dropdownLists = await DropDownList.findAll({ 
+                where: query,
+                include: [{ model: DropDownListItem, as: 'dropdown_list_items' }]
+            });
+            return dropdownLists;
         } catch (error) {
             logger.error(error);
             throw error
