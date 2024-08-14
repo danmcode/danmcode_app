@@ -1,3 +1,5 @@
+'use strict';
+
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { DropDownListItem } from './dropdown.list.item';
@@ -20,7 +22,6 @@ class DropDownList extends Model<DropDownListAttributes, DropDownListCreationAtt
     public readonly updatedAt!: Date;
 }
 
-
 DropDownList.init({
     id: {
         primaryKey: true,
@@ -42,11 +43,6 @@ DropDownList.init({
     modelName: 'DropDownList',
     timestamps: true,
     underscored: true
-});
-
-DropDownList.hasMany(DropDownListItem, {
-    foreignKey: 'list_id',
-    as: 'dropdown_list_items'
 });
 
 export { DropDownList, DropDownListAttributes, DropDownListCreationAttributes };

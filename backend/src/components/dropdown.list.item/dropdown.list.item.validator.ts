@@ -43,7 +43,7 @@ const validateDropDownListItemId = () => {
         .not().isEmpty()
         .withMessage(ValidationMessages.DropDownListItemIdRequired)
         .custom(async (value) => {
-            const dropDownListItemId = await DropDownList.findByPk(value);
+            const dropDownListItemId = await DropDownListItem.findByPk(value);
             if (!dropDownListItemId) {
                 return Promise.reject(ValidationMessages.DropDownListItemNotFound);
             }

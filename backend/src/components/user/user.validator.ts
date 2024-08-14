@@ -2,6 +2,7 @@ import { body, param } from 'express-validator';
 import { Role } from '../../database/models/role.model';
 import { ValidationUserMessages } from './validation.messages';
 import { User } from '../../database/models/user.model';
+import { DropDownListItem } from '../../database/models';
 
 const validateIdentification = (isOptional = false) => {
     const validator = body('identification')
@@ -104,6 +105,19 @@ const validateRoleId = (isOptional = false) => {
         : validator.not().isEmpty().withMessage(ValidationUserMessages.RoleIdRequired);
 };
 
+const validateIdentificationTypeId = (isOptional = false) => {
+    const validator = body('identification_type_id')
+        .custom(async (value) => {
+            const identifiactionTypeId = await DropDownListItem.findByPk(value);
+            if (!identifiactionTypeId) {
+                return Promise.reject(ValidationUserMessages.IdentificationTypeNotFound);
+            }
+        });
+    return isOptional
+        ? validator.optional()
+        : validator.not().isEmpty().withMessage(ValidationUserMessages.IdentificationTypeIdRequired);
+};
+
 const validateUserId = () => {
     return body('user_id')
         .not().isEmpty()
@@ -124,7 +138,8 @@ const createUserValidator = () => [
     validateUsername(),
     validateEmail(),
     validatePassword(),
-    validateRoleId()
+    validateRoleId(),
+    validateIdentificationTypeId()
 ];
 
 const updateUserValidator = () => [
@@ -135,7 +150,8 @@ const updateUserValidator = () => [
     validateUsername(true),
     validateEmail(true),
     validatePassword(true),
-    validateRoleId(true)
+    validateRoleId(true),
+    validateIdentificationTypeId(true)
 ];
 
 const getUserValidator = () => [
@@ -147,7 +163,8 @@ const searchUserValidator = () => [
     validateName(true),
     validateLastName(true),
     validateUsername(true),
-    validateEmail(true)
+    validateEmail(true),
+    // validateIdentificationTypeId(true)
 ];
 
 

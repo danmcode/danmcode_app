@@ -9,7 +9,6 @@ import IdentificationTypeController from './components/client.type/client.type.c
 import LocationController from './components/location/location.controller';
 import LocationTypeController from './components/location.type/location.type.controller';
 import SubLocationController from './components/sub.location/sub.location.controller';
-import ContactTypeController from './components/contact.type/contact.type.controller';
 import { DropDownList } from './database/models/dropdown.list';
 import DropDownListController from './components/dropdown.list/dropdown.list.controller';
 import DropDownListItemController from './components/dropdown.list.item/dropdown.list.item.controller';
@@ -46,8 +45,8 @@ export default function registerRoutes(): Router {
         const controllers = [
             new DropDownListController(),
             new DropDownListItemController(),
-            // new RoleController(),
-            // new UserController(),
+            new RoleController(),
+            new UserController(),
             // new ClientTypeController(),
             // new ClientController(),
             // new IdentificationTypeController(),

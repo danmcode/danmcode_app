@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { Role } from './role.model';
-import { IdentificationType } from './identification.type';
+import { DropDownListItem } from './dropdown.list.item';
 
 interface UserAttributes {
     id: string;
@@ -28,6 +28,7 @@ interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'is_act
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     id!: string;
     identification!: string;
+    identification_type_id!: string;
     username!: string;
     name!: string;
     last_name!: string;
@@ -39,7 +40,6 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     is_contact!: boolean;
     is_user_active!: boolean;
     token!: string;
-    identification_type_id!: string;
     role_id!: string;
     is_blocked!: boolean;
     first_login!: boolean;
@@ -57,6 +57,14 @@ User.init(
             type: DataTypes.UUID,
             defaultValue: UUIDV4,
             unique: true,
+        },
+        identification_type_id: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: {
+                key: 'id',
+                model: DropDownListItem
+            }
         },
         identification: {
             type: DataTypes.STRING(12),
@@ -112,10 +120,6 @@ User.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        identification_type_id: {
-            type: DataTypes.UUID,
-            allowNull: false,
-        },
         role_id: {
             type: DataTypes.UUID,
             allowNull: false,
@@ -143,11 +147,6 @@ User.init(
 User.belongsTo(Role, {
     foreignKey: 'role_id',
     as: 'role',
-});
-
-User.belongsTo(IdentificationType, {
-    foreignKey: 'identification_type_id',
-    as: 'identification_type',
 });
 
 export { User, UserAttributes, UserCreationAttributes };

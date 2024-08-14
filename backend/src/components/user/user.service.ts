@@ -4,6 +4,7 @@ import logger from "../../lib/logger";
 import { User, UserAttributes, UserCreationAttributes } from "../../database/models/user.model";
 import { Role } from "../../database/models/role.model";
 import bcrypt from 'bcrypt';
+import { DropDownListItem } from "../../database/models";
 
 export class UserService {
 
@@ -15,7 +16,15 @@ export class UserService {
             payload.password = hashedPassword;
 
             const user = await User.create(payload);
-            return user;
+
+            const userWithRelations = await User.findByPk(user.id, {
+                include: [
+                    { model: Role, as: 'role' },
+                    { model: DropDownListItem, as: 'identification_type' }
+                ]
+            });
+
+            return userWithRelations as UserAttributes;
         } catch (error) {
             logger.error(error);
             throw error;
@@ -26,7 +35,10 @@ export class UserService {
         try {
             const user = await User.findAll({
                 where: { is_active: true },
-                include: [{ model: Role, as: 'role' }]
+                include: [
+                    { model: Role, as: 'role' },
+                    { model: DropDownListItem, as: 'identification_type' }
+                ]
             });
             return user;
         } catch (error) {
@@ -37,7 +49,12 @@ export class UserService {
 
     async findOne(id: string): Promise<User> {
         try {
-            const user = await User.findByPk(id);
+            const user = await User.findByPk(id, {
+                include: [
+                    { model: Role, as: 'role' },
+                    { model: DropDownListItem, as: 'identification_type' }
+                ]
+            });
             return user!;
         } catch (error) {
             logger.error(error);
@@ -53,7 +70,14 @@ export class UserService {
             }
 
             const updatedUser = await user!.update(payload);
-            return updatedUser;
+            const userWithRelations = await User.findByPk(updatedUser.id, {
+                include: [
+                    { model: Role, as: 'role' },
+                    { model: DropDownListItem, as: 'identification_type' }
+                ]
+            });
+
+            return userWithRelations as User;
 
         } catch (error) {
             logger.error({ error });
@@ -81,7 +105,12 @@ export class UserService {
 
     async search(query: any): Promise<User[]> {
         try {
-            const users = await User.findAll({ where: query });
+            const users = await User.findAll({
+                where: query, include: [
+                    { model: Role, as: 'role' },
+                    { model: DropDownListItem, as: 'identification_type' }
+                ]
+            },);
             return users;
         } catch (error) {
             logger.error(error);

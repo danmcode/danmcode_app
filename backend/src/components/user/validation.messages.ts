@@ -28,6 +28,9 @@ export enum ValidationUserMessages {
     
     RoleIdRequired = 'El ID del rol es requerido',
     RoleNotFound = 'El rol no existe',
+
+    IdentificationTypeIdRequired = 'El ID del tipo de identificación es requerido',
+    IdentificationTypeNotFound = 'El tipo de identificación no existe',
     
     UserIdRequired = 'El ID del usuario es requerido',
     UserNotFound = 'El usuario no existe'
