@@ -4,6 +4,7 @@ import logger from "../../lib/logger";
 import { Client, ClientAttributes, ClientCreationAttributes } from "../../database/models/client.model";
 import { DropDownListItem } from "../../database/models";
 import { User } from "../../database/models/user.model";
+import { Location } from "../../database/models/location";
 
 export class ClientService {
 
@@ -15,7 +16,7 @@ export class ClientService {
                 include: [
                     { model: DropDownListItem, as: 'client_type' },
                     { model: User, as: 'client_created_by' },
-                    { model: User, as: 'client_updated_by' }
+                    { model: User, as: 'client_updated_by' },
                 ]
             });
 
@@ -34,7 +35,8 @@ export class ClientService {
                 include: [
                     { model: DropDownListItem, as: 'client_type' },
                     { model: User, as: 'client_created_by' },
-                    { model: User, as: 'client_updated_by' }
+                    { model: User, as: 'client_updated_by' },
+                    { model: Location, as: 'locations' },
                 ]
             });
             return client;
