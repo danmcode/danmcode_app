@@ -1,8 +1,8 @@
 import { body } from 'express-validator';
 import { ValidationClientMessages } from './validation.messages';
 import { Client } from '../../database/models/client.model';
-import { ClientType } from '../../database/models/client.type.model';
 import { User } from '../../database/models/user.model';
+import { DropDownListItem } from '../../database/models';
 
 const validateClientName = (isOptional = false) => {
     const validator = body('client_name')
@@ -79,7 +79,7 @@ const validateClientTypeId = (isOptional = false) => {
         .not().isEmpty()
         .withMessage(ValidationClientMessages.ClientIdRequired)
         .custom(async (value) => {
-            const clientType = await ClientType.findByPk(value);
+            const clientType = await DropDownListItem.findByPk(value);
             if (!clientType) {
                 return Promise.reject(ValidationClientMessages.ClientTypeNotFound);
             }

@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
-import { ClientType } from './client.type.model';
 import { User } from './user.model';
+import { DropDownListItem } from './dropdown.list.item';
 
 interface ClientAttributes {
     id: string;
@@ -81,6 +81,10 @@ Client.init(
         client_type_id: {
             type: DataTypes.UUID,
             allowNull: false,
+            references: {
+                key: 'id',
+                model: DropDownListItem
+            }
         },
         is_active: {
             type: DataTypes.BOOLEAN,
@@ -90,10 +94,18 @@ Client.init(
         created_by: {
             type: DataTypes.UUID,
             allowNull: false,
+            references: {
+                key: 'id',
+                model: User
+            }
         },
         updated_by: {
             type: DataTypes.UUID,
             allowNull: false,
+            references: {
+                key: 'id',
+                model: User
+            }
         },
     },
     {
@@ -104,20 +116,5 @@ Client.init(
         underscored: true
     }
 );
-
-Client.belongsTo(ClientType, {
-    foreignKey: 'client_type_id',
-    as: 'client_type',
-});
-
-Client.belongsTo(User, {
-    foreignKey: 'created_by',
-    as: 'client_created_by',
-});
-
-Client.belongsTo(User, {
-    foreignKey: 'updated_by',
-    as: 'client_updated_by',
-});
 
 export { Client, ClientAttributes, ClientCreationAttributes };

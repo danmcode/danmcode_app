@@ -2,14 +2,25 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
 import { Client, ClientAttributes, ClientCreationAttributes } from "../../database/models/client.model";
-import { ClientType } from "../../database/models/client.type.model";
+import { DropDownListItem } from "../../database/models";
+import { User } from "../../database/models/user.model";
 
 export class ClientService {
 
     async create(payload: ClientCreationAttributes): Promise<ClientAttributes> {
         try {
             const client = await Client.create(payload);
-            return client;
+
+            const clientWithRelations = await Client.findByPk(client.id, {
+                include: [
+                    { model: DropDownListItem, as: 'client_type' },
+                    { model: User, as: 'client_created_by' },
+                    { model: User, as: 'client_updated_by' }
+                ]
+            });
+
+            return clientWithRelations as ClientAttributes;
+
         } catch (error) {
             logger.error(error);
             throw error;
@@ -20,7 +31,11 @@ export class ClientService {
         try {
             const client = await Client.findAll({
                 where: { is_active: true },
-                include: [{ model: ClientType, as: 'client_type' }]
+                include: [
+                    { model: DropDownListItem, as: 'client_type' },
+                    { model: User, as: 'client_created_by' },
+                    { model: User, as: 'client_updated_by' }
+                ]
             });
             return client;
         } catch (error) {
@@ -32,7 +47,11 @@ export class ClientService {
     async findOne(id: string): Promise<Client> {
         try {
             const client = await Client.findByPk(id, {
-                include: [{ model: ClientType, as: 'client_type' }]
+                include: [
+                    { model: DropDownListItem, as: 'client_type' },
+                    { model: User, as: 'client_created_by' },
+                    { model: User, as: 'client_updated_by' }
+                ]
             });
             return client!;
         } catch (error) {
@@ -49,7 +68,16 @@ export class ClientService {
             }
 
             const updatedClient = await client!.update(payload);
-            return updatedClient;
+
+            const clientWithRelations = await Client.findByPk(updatedClient.id, {
+                include: [
+                    { model: DropDownListItem, as: 'client_type' },
+                    { model: User, as: 'client_created_by' },
+                    { model: User, as: 'client_updated_by' }
+                ]
+            });
+
+            return clientWithRelations as Client;
 
         } catch (error) {
             logger.error({ error });
@@ -77,7 +105,16 @@ export class ClientService {
 
     async search(query: any): Promise<Client[]> {
         try {
-            const clients = await Client.findAll({ where: query });
+            const clients = await Client.findAll(
+                { 
+                    where: query,
+                    include: [
+                        { model: DropDownListItem, as: 'client_type' },
+                        { model: User, as: 'client_created_by' },
+                        { model: User, as: 'client_updated_by' }
+                    ]
+                }
+            );
             return clients;
         } catch (error) {
             logger.error(error);
