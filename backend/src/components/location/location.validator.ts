@@ -1,6 +1,9 @@
 import { body } from 'express-validator';
 import { ValidationMessages } from './validation.messages';
 import { Location } from '../../database/models/location';
+import { DropDownListItem } from '../../database/models';
+import { Client } from '../../database/models/client.model';
+import { User } from '../../database/models/user.model';
 
 const validateLocationName = (isOptional = false) => {
     const validator = body('location_name')
@@ -49,11 +52,11 @@ const validateLocationId = () => {
 const validateLocationTypeId = (isOptional = false) => {
     const validator = body('location_type_id')
         .not().isEmpty()
-        .withMessage(ValidationMessages.LocationIdRequired)
+        .withMessage(ValidationMessages.LocationTypeIdRequired)
         .custom(async (value) => {
-            const location = await Location.findByPk(value);
-            if (!location) {
-                return Promise.reject(ValidationMessages.LocationNotFound);
+            const locationType = await DropDownListItem.findByPk(value);
+            if (!locationType) {
+                return Promise.reject(ValidationMessages.LocationTypeNotFound);
             }
         })
     return isOptional
@@ -66,7 +69,7 @@ const validateClientId = (isOptional = false) => {
         .not().isEmpty()
         .withMessage(ValidationMessages.ClientIdRequired)
         .custom(async (value) => {
-            const location = await Location.findByPk(value);
+            const location = await Client.findByPk(value);
             if (!location) {
                 return Promise.reject(ValidationMessages.ClientNotFound);
             }
@@ -81,7 +84,7 @@ const validateUserId = () => {
         .not().isEmpty()
         .withMessage(ValidationMessages.UserIdRequired)
         .custom(async (value) => {
-            const location = await Location.findByPk(value);
+            const location = await User.findByPk(value);
             if (!location) {
                 return Promise.reject(ValidationMessages.UserNotFound);
             }

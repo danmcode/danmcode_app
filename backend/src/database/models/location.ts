@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
 import { Client } from './client.model';
-import { LocationType } from './location.type';
+import { DropDownListItem } from './dropdown.list.item';
 
 interface LocationAttributes {
     id: string;
@@ -50,11 +50,19 @@ Location.init({
     },
     client_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: Client
+        }
     },
     location_type_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: DropDownListItem
+        }
     },
     is_active: {
         type: DataTypes.BOOLEAN,
@@ -63,10 +71,18 @@ Location.init({
     created_by: {
         type: DataTypes.UUID,
         allowNull: false,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
     updated_by: {
         type: DataTypes.UUID,
         allowNull: true,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
 }, {
     sequelize,
@@ -74,26 +90,6 @@ Location.init({
     modelName: 'Location',
     timestamps: true,
     underscored: true
-});
-
-Location.belongsTo(User, {
-    foreignKey: 'created_by',
-    as: 'location_created_by',
-});
-
-Location.belongsTo(User, {
-    foreignKey: 'updated_by',
-    as: 'location_updated_by',
-});
-
-Location.belongsTo(Client, {
-    foreignKey: 'client_id',
-    as: 'client',
-});
-
-Location.belongsTo(LocationType, {
-    foreignKey: 'location_type_id',
-    as: 'location_type',
 });
 
 export { Location, LocationAttributes, LocationCreationAttributes };

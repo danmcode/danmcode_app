@@ -2,13 +2,27 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
 import { Location, LocationAttributes, LocationCreationAttributes } from "../../database/models/location";
+import { DropDownListItem } from "../../database/models";
+import { User } from "../../database/models/user.model";
+import { Client } from "../../database/models/client.model";
 
 export class LocationService {
 
     async create(payload: LocationCreationAttributes): Promise<LocationAttributes> {
         try {
+
             const location = await Location.create(payload);
-            return location;
+
+            const locationWithRelations = await Location.findByPk(location.id, {
+                include: [
+                    { model: DropDownListItem, as: 'location_type' },
+                    { model: User, as: 'location_created_by' },
+                    { model: User, as: 'location_updated_by' }
+                ]
+            });
+
+            return locationWithRelations as LocationAttributes;
+
         } catch (error) {
             logger.error(error);
             throw error;
@@ -17,7 +31,14 @@ export class LocationService {
 
     async find() {
         try {
-            const locations = await Location.findAll({ where: { is_active: true } });
+            const locations = await Location.findAll({
+                where: { is_active: true },
+                include: [
+                    { model: DropDownListItem, as: 'location_type' },
+                    { model: User, as: 'location_created_by' },
+                    { model: User, as: 'location_updated_by' }
+                ]
+            });
             return locations;
         } catch (error) {
             logger.error(error);
@@ -27,7 +48,13 @@ export class LocationService {
 
     async findOne(id: string): Promise<Location> {
         try {
-            const location = await Location.findByPk(id);
+            const location = await Location.findByPk(id, {
+                include: [
+                    { model: DropDownListItem, as: 'location_type' },
+                    { model: User, as: 'location_created_by' },
+                    { model: User, as: 'location_updated_by' }
+                ]
+            });
             return location!;
         } catch (error) {
             logger.error(error);
@@ -42,8 +69,18 @@ export class LocationService {
                 throw new ApiError('Ubicación no encontrada', StatusCodes.NOT_FOUND);
             }
 
-            const updatedRol = await location!.update(payload);
-            return updatedRol;
+            const updatedLocation = await location!.update(payload);
+
+            const locationWithRelations = await Location.findByPk(updatedLocation.id, {
+                include: [
+                    { model: DropDownListItem, as: 'location_type' },
+                    { model: Client, as: 'client' },
+                    { model: User, as: 'location_created_by' },
+                    { model: User, as: 'location_updated_by' }
+                ]
+            });
+
+            return locationWithRelations as Location;
 
         } catch (error) {
             logger.error({ error, 'updated': 'update location' });
@@ -71,7 +108,17 @@ export class LocationService {
 
     async search(query: any): Promise<Location[]> {
         try {
-            const locations = await Location.findAll({ where: query });
+            const locations = await Location.findAll(
+                {
+                    where: query, include: [
+                        { model: DropDownListItem, as: 'location_type' },
+                        { model: Client, as: 'client' },
+                        { model: User, as: 'location_created_by' },
+                        { model: User, as: 'location_updated_by' }
+                    ]
+                },
+
+            );
             return locations;
         } catch (error) {
             logger.error(error);
