@@ -1,23 +1,25 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { Role } from './role.model';
+import { IdentificationType } from './identification.type';
 
 interface UserAttributes {
     id: string;
     identification:string;
+    username: string;
     name: string;
     last_name: string;
-    username: string;
     email: string;
     email_verified: boolean;
     email_verified_at: string;
     password: string;
     is_active: boolean;
     is_contact: boolean;
+    is_user_active: boolean;
     token: string;
-    contact_id: string;
+    identification_type_id: string;
     role_id: string;
-    is_blocked: string;
+    is_blocked: boolean;
     first_login: boolean;
 }
 
@@ -35,10 +37,11 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     password!: string;
     is_active!: boolean;
     is_contact!: boolean;
+    is_user_active!: boolean;
     token!: string;
-    contact_id!: string;
+    identification_type_id!: string;
     role_id!: string;
-    is_blocked!: string;
+    is_blocked!: boolean;
     first_login!: boolean;
 
     public readonly createdAt!: Date;
@@ -60,6 +63,11 @@ User.init(
             allowNull: false,
             unique: true,
         },
+        username: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            unique: true,
+        },
         name: {
             type: DataTypes.STRING(50),
             allowNull: false,
@@ -68,27 +76,22 @@ User.init(
             type: DataTypes.STRING(50),
             allowNull: false,
         },
-        username: {
-            type: DataTypes.STRING(20),
-            allowNull: false,
-            unique: true,
-        },
         email: {
             type: DataTypes.STRING(100),
             allowNull: false,
             unique: true,
         },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
+        email_verified: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
         },
         email_verified_at: {
             type: DataTypes.DATE,
             allowNull: true,
         },
-        email_verified: {
-            type: DataTypes.BOOLEAN,
-            allowNull: true,
+        password: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
         },
         is_active: {
             type: DataTypes.BOOLEAN,
@@ -100,6 +103,23 @@ User.init(
             allowNull: true,
             defaultValue: false,
         },
+        is_user_active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: false,
+        },
+        token: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        identification_type_id: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
+        role_id: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
         is_blocked: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
@@ -109,18 +129,6 @@ User.init(
             type: DataTypes.BOOLEAN,
             allowNull: true,
             defaultValue: false
-        },
-        token: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        contact_id: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        role_id: {
-            type: DataTypes.UUID,
-            allowNull: false,
         },
     },
     {
@@ -135,6 +143,11 @@ User.init(
 User.belongsTo(Role, {
     foreignKey: 'role_id',
     as: 'role',
+});
+
+User.belongsTo(IdentificationType, {
+    foreignKey: 'identification_type_id',
+    as: 'identification_type',
 });
 
 export { User, UserAttributes, UserCreationAttributes };

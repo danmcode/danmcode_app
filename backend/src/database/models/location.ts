@@ -15,6 +15,7 @@ interface LocationAttributes {
     updated_by: string;
 }
 
+
 interface LocationCreationAttributes extends Optional<LocationAttributes, 'id' | 'is_active'> { }
 
 class Location extends Model<LocationAttributes, LocationCreationAttributes> implements LocationAttributes {
@@ -34,8 +35,8 @@ class Location extends Model<LocationAttributes, LocationCreationAttributes> imp
 
 Location.init({
     id: {
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
         type: DataTypes.UUID,
         defaultValue: UUIDV4
     },
@@ -65,7 +66,7 @@ Location.init({
     },
     updated_by: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
     },
 }, {
     sequelize,

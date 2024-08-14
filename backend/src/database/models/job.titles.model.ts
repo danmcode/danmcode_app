@@ -1,23 +1,26 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
+import { Client } from './client.model';
 
-interface IdentificationTypeAttributes {
-    id: string;
-    identification_type: string;
+interface JobTitleAttributes {
+    id: string; 
+    job_title: string;
     description: string;
+    client_id: string;
     is_active: boolean;
     created_by: string;
     updated_by: string;
 }
 
 
-interface IdentificationTypeCreationAttributes extends Optional<IdentificationTypeAttributes, 'id' | 'is_active'> { }
+interface JobTitleCreationAttributes extends Optional<JobTitleAttributes, 'id' | 'is_active'> { }
 
-class IdentificationType extends Model<IdentificationTypeAttributes, IdentificationTypeCreationAttributes> implements IdentificationTypeAttributes {
+class JobTitle extends Model<JobTitleAttributes, JobTitleCreationAttributes> implements JobTitleAttributes {
     public id!: string;
-    public identification_type!: string;
+    public job_title!: string;
     public description!: string;
+    public client_id!: string;
     public is_active!: boolean;
     public created_by!: string;
     public updated_by!: string;
@@ -27,27 +30,29 @@ class IdentificationType extends Model<IdentificationTypeAttributes, Identificat
 }
 
 
-IdentificationType.init({
+JobTitle.init({
     id: {
-        allowNull: false,
         primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: UUIDV4,
-        unique: true,
-    },
-    identification_type: {
-        type: DataTypes.STRING(50),
         allowNull: false,
-        unique: true,
+        type: DataTypes.UUID,
+        defaultValue: UUIDV4
+    },
+    job_title: {
+        type: DataTypes.STRING(50),
+        allowNull: false
     },
     description: {
         type: DataTypes.STRING(200),
         allowNull: false
     },
+    client_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+    },
     is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
-    },        
+    },
     created_by: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -58,20 +63,25 @@ IdentificationType.init({
     },
 }, {
     sequelize,
-    tableName: 'identification_types',
-    modelName: 'IdentificationType',
+    tableName: 'job_titles',
+    modelName: 'JobTitle',
     timestamps: true,
     underscored: true
 });
 
-IdentificationType.belongsTo(User, {
+JobTitle.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'identification_type_created_by',
+    as: 'location_type_created_by',
 });
 
-IdentificationType.belongsTo(User, {
+JobTitle.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'identification_type_updated_by',
+    as: 'location_type_updated_by',
 });
 
-export { IdentificationType, IdentificationTypeAttributes, IdentificationTypeCreationAttributes };
+JobTitle.belongsTo(Client, {
+    foreignKey: 'client_id',
+    as: 'client',
+});
+
+export { JobTitle, JobTitleAttributes, JobTitleCreationAttributes };

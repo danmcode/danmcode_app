@@ -2,22 +2,20 @@ import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
 
-interface IdentificationTypeAttributes {
+interface ArlAttributes {
     id: string;
-    identification_type: string;
-    description: string;
+    arl: string;
     is_active: boolean;
     created_by: string;
     updated_by: string;
 }
 
 
-interface IdentificationTypeCreationAttributes extends Optional<IdentificationTypeAttributes, 'id' | 'is_active'> { }
+interface ArlCreationAttributes extends Optional<ArlAttributes, 'id' | 'is_active'> { }
 
-class IdentificationType extends Model<IdentificationTypeAttributes, IdentificationTypeCreationAttributes> implements IdentificationTypeAttributes {
+class Arl extends Model<ArlAttributes, ArlCreationAttributes> implements ArlAttributes {
     public id!: string;
-    public identification_type!: string;
-    public description!: string;
+    public arl!: string;
     public is_active!: boolean;
     public created_by!: string;
     public updated_by!: string;
@@ -27,22 +25,18 @@ class IdentificationType extends Model<IdentificationTypeAttributes, Identificat
 }
 
 
-IdentificationType.init({
+Arl.init({
     id: {
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
         type: DataTypes.UUID,
         defaultValue: UUIDV4,
         unique: true,
     },
-    identification_type: {
+    arl: {
         type: DataTypes.STRING(50),
         allowNull: false,
         unique: true,
-    },
-    description: {
-        type: DataTypes.STRING(200),
-        allowNull: false
     },
     is_active: {
         type: DataTypes.BOOLEAN,
@@ -58,20 +52,20 @@ IdentificationType.init({
     },
 }, {
     sequelize,
-    tableName: 'identification_types',
-    modelName: 'IdentificationType',
+    tableName: 'arls',
+    modelName: 'Arl',
     timestamps: true,
     underscored: true
 });
 
-IdentificationType.belongsTo(User, {
+Arl.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'identification_type_created_by',
+    as: 'arl_created_by',
 });
 
-IdentificationType.belongsTo(User, {
+Arl.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'identification_type_updated_by',
+    as: 'arl_updated_by',
 });
 
-export { IdentificationType, IdentificationTypeAttributes, IdentificationTypeCreationAttributes };
+export { Arl, ArlAttributes, ArlCreationAttributes };

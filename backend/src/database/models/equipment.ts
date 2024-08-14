@@ -1,22 +1,28 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
+import { EquipmentType } from './equipment.type';
 
-interface ContactTypeAttributes {
+interface EquipmentAttributes {
     id: string;
-    contact_type: string;
+    brand: string;
+    serial: string;
     description: string;
+    equipment_type_id: string;
     is_active: boolean;
     created_by: string;
     updated_by: string;
 }
 
-interface ContactTypeCreationAttributes extends Optional<ContactTypeAttributes, 'id' | 'is_active'> { }
+interface EquipmentCreationAttributes extends Optional<EquipmentAttributes, 'id' | 'is_active'> { }
 
-class ContactType extends Model<ContactTypeAttributes, ContactTypeCreationAttributes> implements ContactTypeAttributes {
+class Equipment extends Model<EquipmentAttributes, EquipmentCreationAttributes> implements EquipmentAttributes {
+    
     public id!: string;
-    public contact_type!: string;
+    public brand!: string;
+    public serial!: string;
     public description!: string;
+    public equipment_type_id!: string;
     public is_active!: boolean;
     public created_by!: string;
     public updated_by!: string;
@@ -26,19 +32,27 @@ class ContactType extends Model<ContactTypeAttributes, ContactTypeCreationAttrib
 }
 
 
-ContactType.init({
+Equipment.init({
     id: {
         primaryKey: true,
         allowNull: false,
         type: DataTypes.UUID,
         defaultValue: UUIDV4
     },
-    contact_type: {
+    brand : {
         type: DataTypes.STRING(50),
-        allowNull: false
+        allowNull: true,
+    },
+    serial : {
+        type: DataTypes.STRING(100),
+        allowNull: true,
     },
     description: {
         type: DataTypes.STRING(200),
+        allowNull: true
+    },
+    equipment_type_id: {
+        type: DataTypes.UUID,
         allowNull: false
     },
     is_active: {
@@ -51,24 +65,30 @@ ContactType.init({
     },
     updated_by: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
     },
 }, {
     sequelize,
-    tableName: 'contact_types',
-    modelName: 'ContactType',
+    tableName: 'vehicles',
+    modelName: 'Equipment',
     timestamps: true,
     underscored: true
 });
 
-ContactType.belongsTo(User, {
+
+Equipment.belongsTo(EquipmentType, {
+    foreignKey: 'equipment_type_id',
+    as: 'equipment_type',
+});
+
+Equipment.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'location_type_created_by',
+    as: 'equipment_created_by',
 });
 
-ContactType.belongsTo(User, {
+Equipment.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'location_type_updated_by',
+    as: 'equipment_updated_by',
 });
 
-export { ContactType, ContactTypeAttributes, ContactTypeCreationAttributes };
+export { Equipment, EquipmentAttributes, EquipmentCreationAttributes };

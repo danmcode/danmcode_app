@@ -2,20 +2,19 @@ import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
 
-interface ContactTypeAttributes {
+interface EquipmentTypeAttributes {
     id: string;
-    contact_type: string;
-    description: string;
+    equipment_type: string;
     is_active: boolean;
     created_by: string;
     updated_by: string;
 }
 
-interface ContactTypeCreationAttributes extends Optional<ContactTypeAttributes, 'id' | 'is_active'> { }
+interface EquipmentTypeCreationAttributes extends Optional<EquipmentTypeAttributes, 'id' | 'is_active'> { }
 
-class ContactType extends Model<ContactTypeAttributes, ContactTypeCreationAttributes> implements ContactTypeAttributes {
+class EquipmentType extends Model<EquipmentTypeAttributes, EquipmentTypeCreationAttributes> implements EquipmentTypeAttributes {
     public id!: string;
-    public contact_type!: string;
+    public equipment_type!: string;
     public description!: string;
     public is_active!: boolean;
     public created_by!: string;
@@ -25,20 +24,15 @@ class ContactType extends Model<ContactTypeAttributes, ContactTypeCreationAttrib
     public readonly updatedAt!: Date;
 }
 
-
-ContactType.init({
+EquipmentType.init({
     id: {
         primaryKey: true,
         allowNull: false,
         type: DataTypes.UUID,
         defaultValue: UUIDV4
     },
-    contact_type: {
+    equipment_type: {
         type: DataTypes.STRING(50),
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING(200),
         allowNull: false
     },
     is_active: {
@@ -51,24 +45,24 @@ ContactType.init({
     },
     updated_by: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
     },
 }, {
     sequelize,
-    tableName: 'contact_types',
-    modelName: 'ContactType',
+    tableName: 'equipment_types',
+    modelName: 'EquipmentType',
     timestamps: true,
     underscored: true
 });
 
-ContactType.belongsTo(User, {
+EquipmentType.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'location_type_created_by',
+    as: 'resident_type_created_by',
 });
 
-ContactType.belongsTo(User, {
+EquipmentType.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'location_type_updated_by',
+    as: 'resident_type_updated_by',
 });
 
-export { ContactType, ContactTypeAttributes, ContactTypeCreationAttributes };
+export { EquipmentType, EquipmentTypeAttributes, EquipmentTypeCreationAttributes };

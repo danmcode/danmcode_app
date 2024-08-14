@@ -34,8 +34,8 @@ class SubLocation extends Model<SubLocationAttributes, SubLocationCreationAttrib
 
 SubLocation.init({
     id: {
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
         type: DataTypes.UUID,
         defaultValue: UUIDV4
     },
@@ -65,11 +65,11 @@ SubLocation.init({
     },
     updated_by: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
     },
 }, {
     sequelize,
-    tableName: 'locations',
+    tableName: 'sub_locations',
     modelName: 'SubLocation',
     timestamps: true,
     underscored: true
@@ -77,12 +77,12 @@ SubLocation.init({
 
 SubLocation.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'location_created_by',
+    as: 'sub_location_created_by',
 });
 
 SubLocation.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'location_updated_by',
+    as: 'sub_location_updated_by',
 });
 
 SubLocation.belongsTo(LocationType, {

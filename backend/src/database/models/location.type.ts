@@ -13,6 +13,7 @@ interface LocationTypeAttributes {
 
 interface LocationTypeCreationAttributes extends Optional<LocationTypeAttributes, 'id' | 'is_active'> { }
 
+
 class LocationType extends Model<LocationTypeAttributes, LocationTypeCreationAttributes> implements LocationTypeAttributes {
     public id!: string;
     public location_type!: string;
@@ -28,8 +29,8 @@ class LocationType extends Model<LocationTypeAttributes, LocationTypeCreationAtt
 
 LocationType.init({
     id: {
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
         type: DataTypes.UUID,
         defaultValue: UUIDV4
     },

@@ -2,21 +2,20 @@ import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
 
-interface IdentificationTypeAttributes {
+interface VisitorTypeAttributes {
     id: string;
-    identification_type: string;
+    visitor_type: string;
     description: string;
     is_active: boolean;
     created_by: string;
     updated_by: string;
 }
 
+interface VisitorTypeCreationAttributes extends Optional<VisitorTypeAttributes, 'id' | 'is_active'> { }
 
-interface IdentificationTypeCreationAttributes extends Optional<IdentificationTypeAttributes, 'id' | 'is_active'> { }
-
-class IdentificationType extends Model<IdentificationTypeAttributes, IdentificationTypeCreationAttributes> implements IdentificationTypeAttributes {
+class VisitorType extends Model<VisitorTypeAttributes, VisitorTypeCreationAttributes> implements VisitorTypeAttributes {
     public id!: string;
-    public identification_type!: string;
+    public visitor_type!: string;
     public description!: string;
     public is_active!: boolean;
     public created_by!: string;
@@ -27,18 +26,16 @@ class IdentificationType extends Model<IdentificationTypeAttributes, Identificat
 }
 
 
-IdentificationType.init({
+VisitorType.init({
     id: {
-        allowNull: false,
         primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: UUIDV4,
-        unique: true,
-    },
-    identification_type: {
-        type: DataTypes.STRING(50),
         allowNull: false,
-        unique: true,
+        type: DataTypes.UUID,
+        defaultValue: UUIDV4
+    },
+    visitor_type: {
+        type: DataTypes.STRING(50),
+        allowNull: false
     },
     description: {
         type: DataTypes.STRING(200),
@@ -47,31 +44,31 @@ IdentificationType.init({
     is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
-    },        
+    },
     created_by: {
         type: DataTypes.UUID,
         allowNull: false,
     },
     updated_by: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
     },
 }, {
     sequelize,
-    tableName: 'identification_types',
-    modelName: 'IdentificationType',
+    tableName: 'visitor_types',
+    modelName: 'VisitorType',
     timestamps: true,
     underscored: true
 });
 
-IdentificationType.belongsTo(User, {
+VisitorType.belongsTo(User, {
     foreignKey: 'created_by',
-    as: 'identification_type_created_by',
+    as: 'visitor_type_created_by',
 });
 
-IdentificationType.belongsTo(User, {
+VisitorType.belongsTo(User, {
     foreignKey: 'updated_by',
-    as: 'identification_type_updated_by',
+    as: 'visitor_type_updated_by',
 });
 
-export { IdentificationType, IdentificationTypeAttributes, IdentificationTypeCreationAttributes };
+export { VisitorType, VisitorTypeAttributes, VisitorTypeCreationAttributes };
