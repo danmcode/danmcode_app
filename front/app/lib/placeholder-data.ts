@@ -141,7 +141,45 @@ const revenue = [
   { month: 'Sep', revenue: 2500 },
   { month: 'Oct', revenue: 2800 },
   { month: 'Nov', revenue: 3000 },
-  { month: 'Dec', revenue: 4800 },
+  { month: 'Dec', revenue: 250 },
 ];
 
-export { users, customers, invoices, revenue };
+const latestInvoices = [
+  {
+    id: "1",
+    name: "John Doe",
+    image_url: "https://via.placeholder.com/150",
+    email: "john.doe@example.com",
+    amount: "$150.00"
+  },
+  {
+    id: "2",
+    name: "Jane Smith",
+    image_url: "https://via.placeholder.com/150",
+    email: "jane.smith@example.com",
+    amount: "$200.00"
+  },
+  {
+    id: "3",
+    name: "Alice Johnson",
+    image_url: "https://via.placeholder.com/150",
+    email: "alice.johnson@example.com",
+    amount: "$300.00"
+  },
+  {
+    id: "4",
+    name: "Bob Brown",
+    image_url: "https://via.placeholder.com/150",
+    email: "bob.brown@example.com",
+    amount: "$250.00"
+  },
+  {
+    id: "5",
+    name: "Charlie Davis",
+    image_url: "https://via.placeholder.com/150",
+    email: "charlie.davis@example.com",
+    amount: "$400.00"
+  }
+]
+
+export { users, customers, invoices, revenue, latestInvoices };
