@@ -10,6 +10,8 @@ import LocationController from './components/location/location.controller';
 import LocationTypeController from './components/location.type/location.type.controller';
 import SubLocationController from './components/sub.location/sub.location.controller';
 import ContactTypeController from './components/contact.type/contact.type.controller';
+import { DropDownList } from './database/models/dropdown.list';
+import DropDownListController from './components/dropdown.list/dropdown.list.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -41,15 +43,16 @@ export default function registerRoutes(): Router {
         const router = Router();
 
         const controllers = [
-            new RoleController(),
-            new UserController(),
-            new ClientTypeController(),
-            new ClientController(),
-            new IdentificationTypeController(),
-            new LocationTypeController(),
-            new LocationController(),
-            new SubLocationController(),
-            new ContactTypeController(),
+            new DropDownListController(),
+            // new RoleController(),
+            // new UserController(),
+            // new ClientTypeController(),
+            // new ClientController(),
+            // new IdentificationTypeController(),
+            // new LocationTypeController(),
+            // new LocationController(),
+            // new SubLocationController(),
+            // new ContactTypeController(),
         ];
 
         controllers.forEach((controller) => {
