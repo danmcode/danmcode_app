@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
 import { DropDownList, DropDownListAttributes, DropDownListCreationAttributes } from "../../database/models/dropdown.list";
+import { DropDownListItem } from "../../database/models/dropdown.list.item";
 
 export class DropDownListService {
 
@@ -17,7 +18,10 @@ export class DropDownListService {
 
     async find() {
         try {
-            const clientTypes = await DropDownList.findAll({ where: { is_active: true } });
+            const clientTypes = await DropDownList.findAll({ 
+                where: { is_active: true },
+                include: [{ model: DropDownListItem, as: 'dropdown_list_items' }]
+            });
             return clientTypes;
         } catch (error) {
             logger.error(error);

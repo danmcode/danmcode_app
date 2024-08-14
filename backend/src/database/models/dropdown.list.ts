@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
-import { User } from './user.model';
+import { DropDownListItem } from './dropdown.list.item';
 
 interface DropDownListAttributes {
     id: string;
@@ -44,14 +44,9 @@ DropDownList.init({
     underscored: true
 });
 
-// DropDownList.belongsTo(User, {
-//     foreignKey: 'created_by',
-//     as: 'dropdown_list_created_by',
-// });
-
-// DropDownList.belongsTo(User, {
-//     foreignKey: 'updated_by',
-//     as: 'dropdown_list_updated_by',
-// });
+DropDownList.hasMany(DropDownListItem, {
+    foreignKey: 'list_id',
+    as: 'dropdown_list_items'
+});
 
 export { DropDownList, DropDownListAttributes, DropDownListCreationAttributes };

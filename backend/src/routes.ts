@@ -12,6 +12,7 @@ import SubLocationController from './components/sub.location/sub.location.contro
 import ContactTypeController from './components/contact.type/contact.type.controller';
 import { DropDownList } from './database/models/dropdown.list';
 import DropDownListController from './components/dropdown.list/dropdown.list.controller';
+import DropDownListItemController from './components/dropdown.list.item/dropdown.list.item.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -44,6 +45,7 @@ export default function registerRoutes(): Router {
 
         const controllers = [
             new DropDownListController(),
+            new DropDownListItemController(),
             // new RoleController(),
             // new UserController(),
             // new ClientTypeController(),
