@@ -5,15 +5,15 @@ import { SubLocation } from '../../database/models/sub.location';
 import { User } from '../../database/models/user.model';
 
 const validateSubLocationName = (isOptional = false) => {
-    const validator = body('location_name')
+    const validator = body('sub_location_name')
         .trim()
         .isLength({ min: 3 })
         .withMessage(ValidationMessages.SubLocationNameMinLength)
         .isLength({ max: 50 })
         .withMessage(ValidationMessages.SubLocationNameMaxLength)
         .custom(async (value) => {
-            const location = await SubLocation.findOne({ where: { sub_location_name: value } });
-            if (location) {
+            const subLocation = await SubLocation.findOne({ where: { sub_location_name: value } });
+            if (subLocation) {
                 return Promise.reject(ValidationMessages.SubLocationInUse);
             }
         });
@@ -41,8 +41,8 @@ const validateSubLocationId = () => {
         .not().isEmpty()
         .withMessage(ValidationMessages.SubLocationIdRequired)
         .custom(async (value) => {
-            const location = await SubLocation.findByPk(value);
-            if (!location) {
+            const subLocation = await SubLocation.findByPk(value);
+            if (!subLocation) {
                 return Promise.reject(ValidationMessages.SubLocationNotFound);
             }
         });
@@ -53,8 +53,8 @@ const validateLocationTypeId = (isOptional = false) => {
         .not().isEmpty()
         .withMessage(ValidationMessages.LocationTypeIdRequired)
         .custom(async (value) => {
-            const location = await SubLocation.findByPk(value);
-            if (!location) {
+            const subLocation = await SubLocation.findByPk(value);
+            if (!subLocation) {
                 return Promise.reject(ValidationMessages.LocationNotFound);
             }
         })
@@ -68,8 +68,8 @@ const validateLocationId = (isOptional = false) => {
         .not().isEmpty()
         .withMessage(ValidationMessages.LocationIdRequired)
         .custom(async (value) => {
-            const location = await Location.findByPk(value);
-            if (!location) {
+            const subLocation = await Location.findByPk(value);
+            if (!subLocation) {
                 return Promise.reject(ValidationMessages.LocationNotFound);
             }
         })

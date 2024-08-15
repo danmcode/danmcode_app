@@ -31,7 +31,6 @@ class SubLocation extends Model<SubLocationAttributes, SubLocationCreationAttrib
     public readonly updatedAt!: Date;
 }
 
-
 SubLocation.init({
     id: {
         primaryKey: true,

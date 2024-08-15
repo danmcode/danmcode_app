@@ -78,5 +78,4 @@ export class SubLocationService {
             throw error
         }
     }
-
 }
