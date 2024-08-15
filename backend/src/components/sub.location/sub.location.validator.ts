@@ -3,6 +3,7 @@ import { ValidationMessages } from './validation.messages';
 import { Location } from '../../database/models/location';
 import { SubLocation } from '../../database/models/sub.location';
 import { User } from '../../database/models/user.model';
+import { DropDownListItem } from '../../database/models';
 
 const validateSubLocationName = (isOptional = false) => {
     const validator = body('sub_location_name')
@@ -53,8 +54,8 @@ const validateLocationTypeId = (isOptional = false) => {
         .not().isEmpty()
         .withMessage(ValidationMessages.LocationTypeIdRequired)
         .custom(async (value) => {
-            const subLocation = await SubLocation.findByPk(value);
-            if (!subLocation) {
+            const locationType = await DropDownListItem.findByPk(value);
+            if (!locationType) {
                 return Promise.reject(ValidationMessages.LocationNotFound);
             }
         })

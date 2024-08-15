@@ -12,7 +12,7 @@ const includes : Includeable[] = [
     { model: DropDownListItem, as: 'location_type' },
     { model: User, as: 'location_created_by' },
     { model: User, as: 'location_updated_by' },
-    { model: SubLocation, as: 'location' }
+    { model: SubLocation, as: 'sublocations' }
 ];
 
 export class LocationService {

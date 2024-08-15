@@ -46,7 +46,7 @@ export default function registerRoutes(): Router {
             new UserController(),
             new ClientController(),
             new LocationController(),
-            // new SubLocationController(),
+            new SubLocationController(),
             // new ContactTypeController(),
         ];
 
