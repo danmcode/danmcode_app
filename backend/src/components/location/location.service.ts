@@ -5,6 +5,15 @@ import { Location, LocationAttributes, LocationCreationAttributes } from "../../
 import { DropDownListItem } from "../../database/models";
 import { User } from "../../database/models/user.model";
 import { Client } from "../../database/models/client.model";
+import { SubLocation } from "../../database/models/sub.location";
+import { Includeable } from "sequelize";
+
+const includes : Includeable[] = [
+    { model: DropDownListItem, as: 'location_type' },
+    { model: User, as: 'location_created_by' },
+    { model: User, as: 'location_updated_by' },
+    { model: SubLocation, as: 'location' }
+];
 
 export class LocationService {
 
@@ -14,11 +23,7 @@ export class LocationService {
             const location = await Location.create(payload);
 
             const locationWithRelations = await Location.findByPk(location.id, {
-                include: [
-                    { model: DropDownListItem, as: 'location_type' },
-                    { model: User, as: 'location_created_by' },
-                    { model: User, as: 'location_updated_by' }
-                ]
+                include: includes,
             });
 
             return locationWithRelations as LocationAttributes;
@@ -33,11 +38,7 @@ export class LocationService {
         try {
             const locations = await Location.findAll({
                 where: { is_active: true },
-                include: [
-                    { model: DropDownListItem, as: 'location_type' },
-                    { model: User, as: 'location_created_by' },
-                    { model: User, as: 'location_updated_by' }
-                ]
+                include: includes
             });
             return locations;
         } catch (error) {
@@ -49,11 +50,7 @@ export class LocationService {
     async findOne(id: string): Promise<Location> {
         try {
             const location = await Location.findByPk(id, {
-                include: [
-                    { model: DropDownListItem, as: 'location_type' },
-                    { model: User, as: 'location_created_by' },
-                    { model: User, as: 'location_updated_by' }
-                ]
+                include: includes
             });
             return location!;
         } catch (error) {
@@ -72,12 +69,7 @@ export class LocationService {
             const updatedLocation = await location!.update(payload);
 
             const locationWithRelations = await Location.findByPk(updatedLocation.id, {
-                include: [
-                    { model: DropDownListItem, as: 'location_type' },
-                    { model: Client, as: 'client' },
-                    { model: User, as: 'location_created_by' },
-                    { model: User, as: 'location_updated_by' }
-                ]
+                include: includes
             });
 
             return locationWithRelations as Location;
@@ -109,15 +101,7 @@ export class LocationService {
     async search(query: any): Promise<Location[]> {
         try {
             const locations = await Location.findAll(
-                {
-                    where: query, include: [
-                        { model: DropDownListItem, as: 'location_type' },
-                        { model: Client, as: 'client' },
-                        { model: User, as: 'location_created_by' },
-                        { model: User, as: 'location_updated_by' }
-                    ]
-                },
-
+                { where: query, include: includes },
             );
             return locations;
         } catch (error) {

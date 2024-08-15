@@ -1,8 +1,8 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
-import { LocationType } from './location.type';
 import { Location } from './location';
+import { DropDownListItem } from './dropdown.list.item';
 
 interface SubLocationAttributes {
     id: string;
@@ -49,11 +49,19 @@ SubLocation.init({
     },
     location_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: Location
+        }
     },
     location_type_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: DropDownListItem
+        }
     },
     is_active: {
         type: DataTypes.BOOLEAN,
@@ -62,10 +70,18 @@ SubLocation.init({
     created_by: {
         type: DataTypes.UUID,
         allowNull: false,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
     updated_by: {
         type: DataTypes.UUID,
         allowNull: true,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
 }, {
     sequelize,
@@ -73,26 +89,6 @@ SubLocation.init({
     modelName: 'SubLocation',
     timestamps: true,
     underscored: true
-});
-
-SubLocation.belongsTo(User, {
-    foreignKey: 'created_by',
-    as: 'sub_location_created_by',
-});
-
-SubLocation.belongsTo(User, {
-    foreignKey: 'updated_by',
-    as: 'sub_location_updated_by',
-});
-
-SubLocation.belongsTo(LocationType, {
-    foreignKey: 'location_type_id',
-    as: 'location_type',
-});
-
-SubLocation.belongsTo(Location, {
-    foreignKey: 'location_id',
-    as: 'location',
 });
 
 export { SubLocation, SubLocationAttributes, SubLocationCreationAttributes };
