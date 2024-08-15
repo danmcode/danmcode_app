@@ -2,10 +2,9 @@ import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
 import { Client } from './client.model';
-import { ContactType } from './contact.type';
 import { JobTitle } from './job.titles.model';
 import { SubLocation } from './sub.location';
-import { ResidentType } from './resident.type';
+import { DropDownListItem } from './dropdown.list.item';
 
 interface ContactAttributes {
     id: string;
@@ -60,27 +59,51 @@ Contact.init({
     },
     user_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
     contact_type_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: DropDownListItem
+        }
     },
     resident_type_id: {
         type: DataTypes.UUID,
-        allowNull: true
+        allowNull: true,
+        references: {
+            key: 'id',
+            model: DropDownListItem
+        }
     },
     job_title_id: {
         type: DataTypes.UUID,
-        allowNull: true
+        allowNull: true,
+        references: {
+            key: 'id',
+            model: JobTitle
+        }
     },
-    client_id: {
+        client_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: Client
+        }
     },
     sub_location_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: SubLocation
+        }
     },
     is_active: {
         type: DataTypes.BOOLEAN,
@@ -89,10 +112,18 @@ Contact.init({
     created_by: {
         type: DataTypes.UUID,
         allowNull: false,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
     updated_by: {
         type: DataTypes.UUID,
         allowNull: true,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
 }, {
     sequelize,
@@ -100,46 +131,6 @@ Contact.init({
     modelName: 'Contact',
     timestamps: true,
     underscored: true
-});
-
-Contact.belongsTo(User, {
-    foreignKey: 'user_id',
-    as: 'user',
-});
-
-Contact.belongsTo(ContactType, {
-    foreignKey: 'contact_type_id',
-    as: 'contact_type',
-});
-
-Contact.belongsTo(ResidentType, {
-    foreignKey: 'resident_type_id',
-    as: 'resident_type',
-});
-
-Contact.belongsTo(JobTitle, {
-    foreignKey: 'job_title_id',
-    as: 'job_title',
-});
-
-Contact.belongsTo(Client, {
-    foreignKey: 'client_id',
-    as: 'client',
-});
-
-Contact.belongsTo(SubLocation, {
-    foreignKey: 'sub_location_id',
-    as: 'sub_location',
-});
-
-Contact.belongsTo(User, {
-    foreignKey: 'created_by',
-    as: 'contact_created_by',
-});
-
-Contact.belongsTo(User, {
-    foreignKey: 'updated_by',
-    as: 'contact_updated_by',
 });
 
 export { Contact, ContactAttributes, ContactCreationAttributes };

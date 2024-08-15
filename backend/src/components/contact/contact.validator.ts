@@ -1,69 +1,46 @@
 import { body, param } from 'express-validator';
 import { ValidationMessages } from './validation.messages';
-import { ClientType } from '../../database/models/client.type.model';
+import { validateContactId } from '../../lib/global.validators';
 
-const validateClientTypeName = (isOptional = false) => {
-    const validator = body('client_type')
-        .trim()
-        .isLength({ min: 3 })
-        .withMessage(ValidationMessages.ClientTypeMinLength)
-        .isLength({ max: 50 })
-        .withMessage(ValidationMessages.ClientTypeMaxLength)
-        .custom(async (value) => {
-            const clientType = await ClientType.findOne({ where: { client_type: value } });
-            if (clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeInUse);
-            }
-        });
 
-    return isOptional 
-        ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.ClientTypeRequired);
-};
+const validatedMainContact = () => {
+    return body('main_contact')
+        .isBoolean()
+        .optional()
+        .withMessage(ValidationMessages.MainContactBoolean)
+}
 
-const validateDescription = (isOptional = false) => {
-    const validator = body('description')
-        .trim()
-        .isLength({ min: 10 })
-        .withMessage(ValidationMessages.DescriptionMinLength)
+const validateQRPathMaxLenght = ( isOptional = false ) => {
+    const validator = body('qr_path')
         .isLength({ max: 200 })
-        .withMessage(ValidationMessages.DescriptionMaxLength);
+        .withMessage(ValidationMessages.ValidateQRPathMaxLenght)
 
-    return isOptional 
-        ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.DescriptionRequired);
-};
+        return isOptional
+            ? validator.optional() 
+            : validator
+}
 
-const validateClientTypeId = () => {
-    return body('client_type_id')
-        .not().isEmpty()
-        .withMessage(ValidationMessages.ClientTypeIdRequired)
-        .custom(async (value) => {
-            const clientType = await ClientType.findByPk(value);
-            if (!clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeNotFound);
-            }
-        });
-};
+const validateUserId = ( isOptional = false ) => {
+    const validator = body('user_id');
+}
 
-const createClientTypeValidator = () => [
-    validateClientTypeName(),
-    validateDescription()
+
+const createContactValidator = () => [
+    validatedMainContact(),
+    validateQRPathMaxLenght(true)
 ];
 
-const updateClientTypeValidator = () => [
-    validateClientTypeId(),
-    validateClientTypeName(true),
-    validateDescription(true)
+const updateContactValidator = () => [
+    validatedMainContact(),
+    validateQRPathMaxLenght(true),
 ];
 
-const getClientTypeValidator = () => [
-    validateClientTypeId()
+const getContactValidator = () => [
+    validateContactId(),
 ];
 
 const searchValidator = () => [
-    validateClientTypeName(true),
-    validateDescription(true)
+
 ];
 
-export { createClientTypeValidator, updateClientTypeValidator, getClientTypeValidator, searchValidator };
+export { createContactValidator, updateContactValidator, getContactValidator, searchValidator };
