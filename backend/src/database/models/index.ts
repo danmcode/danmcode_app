@@ -5,6 +5,7 @@ import { User } from './user.model';
 import { Client } from './client.model';
 import { Location } from './location';
 import { SubLocation } from './sub.location';
+import { JobTitle } from './job.titles.model';
 
 DropDownList.hasMany(DropDownListItem, { foreignKey: 'list_id', as: 'dropdown_list_items' });
 DropDownListItem.belongsTo(DropDownList, { foreignKey: 'list_id', as: 'dropdown_list' });
@@ -26,5 +27,9 @@ SubLocation.belongsTo(User, { foreignKey: 'created_by', as: 'sub_location_create
 SubLocation.belongsTo(User, { foreignKey: 'updated_by', as: 'sub_location_updated_by' });
 SubLocation.belongsTo(DropDownListItem, { foreignKey: 'location_type_id', as: 'location_type' });
 SubLocation.belongsTo(Location, { foreignKey: 'location_id', as: 'location' });
+
+JobTitle.belongsTo(User, { foreignKey: 'created_by', as: 'location_type_created_by' });
+JobTitle.belongsTo(User, { foreignKey: 'updated_by', as: 'location_type_updated_by' });
+JobTitle.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
 
 export { DropDownList, DropDownListItem };

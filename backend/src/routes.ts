@@ -6,9 +6,9 @@ import UserController from './components/user/user.controller';
 import ClientController from './components/client/client.controller';
 import LocationController from './components/location/location.controller';
 import SubLocationController from './components/sub.location/sub.location.controller';
-import { DropDownList } from './database/models/dropdown.list';
 import DropDownListController from './components/dropdown.list/dropdown.list.controller';
 import DropDownListItemController from './components/dropdown.list.item/dropdown.list.item.controller';
+import JobTitleController from './components/job.title/job.title.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -47,7 +47,7 @@ export default function registerRoutes(): Router {
             new ClientController(),
             new LocationController(),
             new SubLocationController(),
-            // new ContactTypeController(),
+            new JobTitleController(),
         ];
 
         controllers.forEach((controller) => {

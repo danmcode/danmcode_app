@@ -48,6 +48,10 @@ JobTitle.init({
     client_id: {
         type: DataTypes.UUID,
         allowNull: false,
+        references: {
+            key: 'id',
+            model: Client
+        }
     },
     is_active: {
         type: DataTypes.BOOLEAN,
@@ -56,10 +60,18 @@ JobTitle.init({
     created_by: {
         type: DataTypes.UUID,
         allowNull: false,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
     updated_by: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
 }, {
     sequelize,
@@ -67,21 +79,6 @@ JobTitle.init({
     modelName: 'JobTitle',
     timestamps: true,
     underscored: true
-});
-
-JobTitle.belongsTo(User, {
-    foreignKey: 'created_by',
-    as: 'location_type_created_by',
-});
-
-JobTitle.belongsTo(User, {
-    foreignKey: 'updated_by',
-    as: 'location_type_updated_by',
-});
-
-JobTitle.belongsTo(Client, {
-    foreignKey: 'client_id',
-    as: 'client',
 });
 
 export { JobTitle, JobTitleAttributes, JobTitleCreationAttributes };

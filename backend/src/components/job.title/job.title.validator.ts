@@ -1,69 +1,52 @@
 import { body, param } from 'express-validator';
 import { ValidationMessages } from './validation.messages';
-import { ClientType } from '../../database/models/client.type.model';
+import { JobTitle } from '../../database/models/job.titles.model';
+import { Client } from '../../database/models/client.model';
+import { User } from '../../database/models/user.model';
+import { validateClientId, validateCreateUserId, validateDescription, validateJobTitleId, validateUpdateUserId } from '../../lib/global.validators';
 
-const validateClientTypeName = (isOptional = false) => {
-    const validator = body('client_type')
+const validateJobTitleName = (isOptional = false) => {
+
+    const validator = body('job_title')
         .trim()
         .isLength({ min: 3 })
-        .withMessage(ValidationMessages.ClientTypeMinLength)
+        .withMessage(ValidationMessages.JobTitleMinLength)
         .isLength({ max: 50 })
-        .withMessage(ValidationMessages.ClientTypeMaxLength)
+        .withMessage(ValidationMessages.JobTitleMaxLength)
         .custom(async (value) => {
-            const clientType = await ClientType.findOne({ where: { client_type: value } });
-            if (clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeInUse);
+            const jobTitle = await JobTitle.findOne({ where: { job_title: value } });
+            if (jobTitle) {
+                return Promise.reject(ValidationMessages.JobTitleInUse);
             }
         });
 
-    return isOptional 
-        ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.ClientTypeRequired);
+    return isOptional
+        ? validator.optional()
+        : validator.not().isEmpty().withMessage(ValidationMessages.JobTitleRequired);
 };
 
-const validateDescription = (isOptional = false) => {
-    const validator = body('description')
-        .trim()
-        .isLength({ min: 10 })
-        .withMessage(ValidationMessages.DescriptionMinLength)
-        .isLength({ max: 200 })
-        .withMessage(ValidationMessages.DescriptionMaxLength);
-
-    return isOptional 
-        ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.DescriptionRequired);
-};
-
-const validateClientTypeId = () => {
-    return body('client_type_id')
-        .not().isEmpty()
-        .withMessage(ValidationMessages.ClientTypeIdRequired)
-        .custom(async (value) => {
-            const clientType = await ClientType.findByPk(value);
-            if (!clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeNotFound);
-            }
-        });
-};
-
-const createClientTypeValidator = () => [
-    validateClientTypeName(),
-    validateDescription()
+const createJobTitleValidator = () => [
+    validateJobTitleName(),
+    validateDescription(),
+    validateClientId(false, ValidationMessages.ClientIdRequired, ValidationMessages.ClientNotFound),
+    validateCreateUserId(ValidationMessages.UserIdRequired, ValidationMessages.UserNotFound)
 ];
 
-const updateClientTypeValidator = () => [
-    validateClientTypeId(),
-    validateClientTypeName(true),
-    validateDescription(true)
+const updateJobTitleValidator = () => [
+    validateJobTitleId(),
+    validateJobTitleName(true),
+    validateDescription(true),
+    validateClientId(true, ValidationMessages.ClientIdRequired, ValidationMessages.ClientNotFound),
+    validateUpdateUserId(ValidationMessages.UserIdRequired, ValidationMessages.UserNotFound)
 ];
 
-const getClientTypeValidator = () => [
-    validateClientTypeId()
+const getJobTitleValidator = () => [
+    validateJobTitleId()
 ];
 
 const searchValidator = () => [
-    validateClientTypeName(true),
+    validateJobTitleName(true),
     validateDescription(true)
 ];
 
-export { createClientTypeValidator, updateClientTypeValidator, getClientTypeValidator, searchValidator };
+export { createJobTitleValidator, updateJobTitleValidator, getJobTitleValidator, searchValidator };
