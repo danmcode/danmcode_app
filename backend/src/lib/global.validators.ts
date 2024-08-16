@@ -8,6 +8,7 @@ import { DropDownListItem } from "../database/models";
 import { SubLocation } from "../database/models/sub.location";
 import { Contact } from "../database/models/contact";
 import { Arl } from "../database/models/arl";
+import { Vehicle } from "../database/models/vehicle";
 
 const validateCreateUserId = () => {
     return body('created_by')
@@ -122,6 +123,21 @@ const validateResidentTypeId = (isOptional = false) => {
         : validator.not().isEmpty().withMessage(GlobalValidationMessages.ResidentTypeIdRequired)
 };
 
+const validateVehicleTypeId = (isOptional = false) => {
+    const validator = body('vehicle_type_id')
+        .isUUID().withMessage(GlobalValidationMessages.InvalidId)
+        .custom(async (value) => {
+            const residentType = await DropDownListItem.findByPk(value);
+            if (!residentType) {
+                return Promise.reject(GlobalValidationMessages.ResidentTypeNotFound);
+            }
+        });
+
+    return isOptional
+        ? validator.optional()
+        : validator.not().isEmpty().withMessage(GlobalValidationMessages.ResidentTypeIdRequired)
+};
+
 const validateARLId = (isOptional = false) => {
     const validator = body('arl_id')
         .isUUID().withMessage(GlobalValidationMessages.InvalidId)
@@ -137,10 +153,8 @@ const validateARLId = (isOptional = false) => {
         : validator.not().isEmpty().withMessage(GlobalValidationMessages.ARLIdRequired)
 };
 
-const validateContactId = () => {
-    return body('contact_id')
-        .not().isEmpty()
-        .withMessage(GlobalValidationMessages.ContactIdRequired)
+const validateContactId = (isOptional = false) => {
+    const validator = body('contact_id')
         .isUUID().withMessage(GlobalValidationMessages.InvalidId)
         .custom(async (value) => {
             const contact = await Contact.findByPk(value);
@@ -148,6 +162,25 @@ const validateContactId = () => {
                 return Promise.reject(GlobalValidationMessages.ContactNotFound);
             }
         });
+    
+    return isOptional 
+        ? validator.optional()
+        : validator.not().isEmpty().withMessage(GlobalValidationMessages.ContactIdRequired)
+};
+
+const validateVehicleId = (isOptional = false) => {
+    const validator = body('vehicel_id')
+        .isUUID().withMessage(GlobalValidationMessages.InvalidId)
+        .custom(async (value) => {
+            const contact = await Vehicle.findByPk(value);
+            if (!contact) {
+                return Promise.reject(GlobalValidationMessages.VehicleNotFound);
+            }
+        });
+    
+    return isOptional 
+        ? validator.optional()
+        : validator.not().isEmpty().withMessage(GlobalValidationMessages.VehicleIdRequired)
 };
 
 export {
@@ -160,5 +193,7 @@ export {
     validateResidentTypeId,
     validateSubLocationId,
     validateContactId,
-    validateARLId
+    validateARLId,
+    validateVehicleTypeId,
+    validateVehicleId
 }

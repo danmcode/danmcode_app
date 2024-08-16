@@ -30,8 +30,14 @@ export enum GlobalValidationMessages {
     ContactTypeIdRequired = 'El ID del tipo de contacto es requerido',
     ContactTypeNotFound = 'El tipo de contacto no existe',
 
+    VehicleTypeIdRequired = 'El ID del tipo de vehículo es requerido',
+    VehicleTypeNotFound = 'El tipo de vehículo no existe',
+
     ContactIdRequired = 'El ID del del contacto es requerido',
     ContactNotFound = 'El contacto no existe',
+
+    VehicleIdRequired = 'El ID del del vehículo es requerido',
+    VehicleNotFound = 'El vehículo no existe',
     
     ARLIdRequired = 'El ID de la ARL no puede estar vacío',
     ARLNotFound = 'La ARL no existe'

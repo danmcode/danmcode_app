@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
 import { User } from './user.model';
 import { Contact } from './contact';
-import { VehicleType } from './vehicle.type';
+import { DropDownListItem } from './dropdown.list.item';
 
 interface VehicleAttributes {
     id: string;
@@ -50,11 +50,19 @@ Vehicle.init({
     },
     vehicle_type_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            key: 'id',
+            model: DropDownListItem
+        }
     },
     contact_id: {
         type: DataTypes.UUID,
-        allowNull: true
+        allowNull: true,
+        references: {
+            key: 'id',
+            model: Contact
+        }
     },
     liscense_plate: {
         type: DataTypes.STRING(6),
@@ -75,10 +83,18 @@ Vehicle.init({
     created_by: {
         type: DataTypes.UUID,
         allowNull: false,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
     updated_by: {
         type: DataTypes.UUID,
         allowNull: true,
+        references: {
+            key: 'id',
+            model: User
+        }
     },
 }, {
     sequelize,
@@ -86,26 +102,6 @@ Vehicle.init({
     modelName: 'Vehicle',
     timestamps: true,
     underscored: true
-});
-
-Vehicle.belongsTo(Contact, {
-    foreignKey: 'contact_id',
-    as: 'contact',
-});
-
-Vehicle.belongsTo(VehicleType, {
-    foreignKey: 'vechicle_type_id',
-    as: 'vehicle_type',
-});
-
-Vehicle.belongsTo(User, {
-    foreignKey: 'created_by',
-    as: 'vehicle_created_by',
-});
-
-Vehicle.belongsTo(User, {
-    foreignKey: 'updated_by',
-    as: 'vehicle_updated_by',
 });
 
 export { Vehicle, VehicleAttributes, VehicleCreationAttributes };

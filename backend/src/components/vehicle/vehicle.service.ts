@@ -1,14 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
-import { ClientType, ClientTypeAttributes, ClientTypeCreationAttributes } from "../../database/models/client.type.model";
+import { Vehicle, VehicleAttributes, VehicleCreationAttributes } from "../../database/models/vehicle";
 
-export class ClientTypeService {
+export class VehicleService {
 
-    async create(payload: ClientTypeCreationAttributes): Promise<ClientTypeAttributes> {
+    async create(payload: VehicleCreationAttributes): Promise<VehicleAttributes> {
         try {
-            const clientType = await ClientType.create(payload);
-            return clientType;
+            const vehicle = await Vehicle.create(payload);
+            return vehicle;
         } catch (error) {
             logger.error(error);
             throw error;
@@ -17,47 +17,47 @@ export class ClientTypeService {
 
     async find() {
         try {
-            const clientTypes = await ClientType.findAll({ where: { is_active: true } });
-            return clientTypes;
+            const vehicles = await Vehicle.findAll({ where: { is_active: true } });
+            return vehicles;
         } catch (error) {
             logger.error(error);
             throw error
         }
     }
 
-    async findOne(id: string): Promise<ClientType> {
+    async findOne(id: string): Promise<Vehicle> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            return clientType!;
+            const vehicle = await Vehicle.findByPk(id);
+            return vehicle!;
         } catch (error) {
             logger.error(error);
             throw new ApiError(`Id: ${id} No encontrado`, StatusCodes.NOT_FOUND);
         }
     }
 
-    async update(id: string, payload: ClientTypeCreationAttributes): Promise<ClientType> {
+    async update(id: string, payload: VehicleCreationAttributes): Promise<Vehicle> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            if (!clientType) {
-                throw new ApiError('Rol no encontrado', StatusCodes.NOT_FOUND);
+            const vehicle = await Vehicle.findByPk(id);
+            if (!vehicle) {
+                throw new ApiError('Registro no encontrado', StatusCodes.NOT_FOUND);
             }
 
-            const updatedRol = await clientType!.update(payload);
+            const updatedRol = await vehicle!.update(payload);
             return updatedRol;
 
         } catch (error) {
-            logger.error({ error, 'updated': 'update clientType' });
+            logger.error({ error, 'updated': 'update vehicle' });
             throw error
         }
     }
 
     async delete(id: string): Promise<boolean> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            console.log(clientType);
-            if (clientType) {
-                clientType.is_active = false;
-                await clientType.save();
+            const vehicle = await Vehicle.findByPk(id);
+            console.log(vehicle);
+            if (vehicle) {
+                vehicle.is_active = false;
+                await vehicle.save();
                 return true;
             }
 
@@ -69,10 +69,10 @@ export class ClientTypeService {
         }
     }
 
-    async search(query: any): Promise<ClientType[]> {
+    async search(query: any): Promise<Vehicle[]> {
         try {
-            const clientTypes = await ClientType.findAll({ where: query });
-            return clientTypes;
+            const vehicles = await Vehicle.findAll({ where: query });
+            return vehicles;
         } catch (error) {
             logger.error(error);
             throw error

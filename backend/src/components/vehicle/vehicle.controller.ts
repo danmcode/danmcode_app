@@ -5,27 +5,27 @@ import { validationResult } from 'express-validator';
 import logger from '../../lib/logger';
 import { Op } from 'sequelize';
 import { RouteDefinition } from '../../types/route.definition';
-import { IdentificationTypeAttributes } from '../../database/models/identification.type';
-import { IdentificationTypeService } from '../identification.type/identification.type.service';
-import { createIdentificationTypeValidator, getIdentificationTypeValidator, searchValidator, updateIdentificationTypeValidator } from '../identification.type/identification.type.validator';
+import { VehicleService } from './vehicle.service';
+import { createVehicleValidator, getVehicleValidator, searchValidator, updateVehicleValidator } from './vehicle.validator';
+import { VehicleAttributes } from '../../database/models/vehicle';
 
-export default class IdentificationTypeController extends BaseController {
+export default class VehicleController extends BaseController {
 
-    private identificationType: IdentificationTypeService;
-    public basePath = 'identification-types';
+    private Vehicle: VehicleService;
+    public basePath = 'vehicle';
 
     constructor() {
         super();
-        this.identificationType = new IdentificationTypeService();
+        this.Vehicle = new VehicleService();
     }
 
     public routes(): RouteDefinition[] {
         return [
-            { path: '/', method: 'post', handler: this.createIdentificationType.bind(this), validator: createIdentificationTypeValidator() },
-            { path: '/', method: 'get', handler: this.getIdentificationTypes.bind(this) },
-            { path: '/get-identification-type', method: 'post', handler: this.getIdentificationType.bind(this), validator: getIdentificationTypeValidator() },
-            { path: '/update', method: 'post', handler: this.updateIdentificationType.bind(this), validator: updateIdentificationTypeValidator() },
-            { path: '/delete', method: 'post', handler: this.delete.bind(this), validator: getIdentificationTypeValidator() },
+            { path: '/', method: 'post', handler: this.createVehicle.bind(this), validator: createVehicleValidator() },
+            { path: '/', method: 'get', handler: this.getVehicles.bind(this) },
+            { path: '/get-vehicle', method: 'post', handler: this.getVehicle.bind(this), validator: getVehicleValidator() },
+            { path: '/update', method: 'post', handler: this.updateVehicle.bind(this), validator: updateVehicleValidator() },
+            { path: '/delete', method: 'post', handler: this.delete.bind(this), validator: getVehicleValidator() },
             { path: '/search', method: 'post', handler: this.search.bind(this), validator: searchValidator()},
         ];
     }
@@ -34,7 +34,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async createIdentificationType(req: Request, res: Response): Promise<void> {
+    public async createVehicle(req: Request, res: Response): Promise<void> {
         try {
 
             let errors = validationResult(req);
@@ -45,10 +45,10 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType: IdentificationTypeAttributes = await this.identificationType.create(req.body);
+            const Vehicle: VehicleAttributes = await this.Vehicle.create(req.body);
 
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            res.locals.data = { Vehicle };
+            logger.info(Vehicle);
             return super.send(res, StatusCodes.CREATED);
 
         } catch (error) {
@@ -62,11 +62,11 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async getIdentificationTypes(_: Request, res: Response): Promise<void> {
+    public async getVehicles(_: Request, res: Response): Promise<void> {
         try {
 
-            const identificationTypes = await this.identificationType.find();
-            res.locals.data = { identificationTypes };
+            const Vehicles = await this.Vehicle.find();
+            res.locals.data = { Vehicles };
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
@@ -82,7 +82,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async getIdentificationType(req: Request, res: Response): Promise<void> {
+    public async getVehicle(req: Request, res: Response): Promise<void> {
         try {
             let errors = validationResult(req);
 
@@ -92,15 +92,15 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType = await this.identificationType.findOne(req.body.identification_type_id);
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            const Vehicle = await this.Vehicle.findOne(req.body.vehicle_id);
+            res.locals.data = { Vehicle };
+            logger.info(Vehicle);
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
 
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'Vehicle.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
 
         }
@@ -110,7 +110,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async updateIdentificationType(req: Request, res: Response): Promise<void> {
+    public async updateVehicle(req: Request, res: Response): Promise<void> {
         try {
             let errors = validationResult(req);
 
@@ -120,15 +120,15 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType = await this.identificationType.update(req.body.identification_type_id, req.body);
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            const Vehicle = await this.Vehicle.update(req.body.vehicle_id, req.body);
+            res.locals.data = { Vehicle };
+            logger.info(Vehicle);
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
 
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'Vehicle.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
@@ -149,8 +149,8 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const id = req.body.identification_type_id;
-            const status: boolean = await this.identificationType.delete(id);
+            const id = req.body.vehicle_id;
+            const status: boolean = await this.Vehicle.delete(id);
 
             res.locals.data = {
                 status,
@@ -161,7 +161,7 @@ export default class IdentificationTypeController extends BaseController {
 
         } catch (error) {
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'Vehicle.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
@@ -183,15 +183,15 @@ export default class IdentificationTypeController extends BaseController {
                 }
             }
 
-            const identificationTypes = await this.identificationType.search(conditions);
-            res.locals.data = { identificationTypes };
-            logger.info(identificationTypes);
+            const Vehicles = await this.Vehicle.search(conditions);
+            res.locals.data = { Vehicles };
+            logger.info(Vehicles);
 
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'Vehicle.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }

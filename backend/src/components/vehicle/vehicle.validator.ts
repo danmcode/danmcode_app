@@ -1,69 +1,77 @@
-import { body, param } from 'express-validator';
+import { body } from 'express-validator';
 import { ValidationMessages } from './validation.messages';
-import { ClientType } from '../../database/models/client.type.model';
+import { validateContactId, validateCreateUserId, validateDescription, validateUpdateUserId, validateVehicleId, validateVehicleTypeId } from '../../lib/global.validators';
+import { Vehicle } from '../../database/models/vehicle';
 
-const validateClientTypeName = (isOptional = false) => {
-    const validator = body('client_type')
-        .trim()
-        .isLength({ min: 3 })
-        .withMessage(ValidationMessages.ClientTypeMinLength)
-        .isLength({ max: 50 })
-        .withMessage(ValidationMessages.ClientTypeMaxLength)
+const validateBrand = (isOptional = false) => {
+    const validator = body('brand')
+        .trim().isLength({ min: 3 }).withMessage(ValidationMessages.BrandMinLength)
+        .isLength({ max: 50 }).withMessage(ValidationMessages.BrandMaxLength);
+
+    return isOptional 
+        ? validator.optional() 
+        : validator.not().isEmpty().withMessage(ValidationMessages.BrandRequired);
+};
+
+const validateColor = (isOptional = false) => {
+    const validator = body('color')
+        .trim().isLength({ min: 3 }).withMessage(ValidationMessages.ColorMinLength)
+        .isLength({ max: 50 }).withMessage(ValidationMessages.ColorMaxLength);
+
+    return isOptional 
+        ? validator.optional() 
+        : validator.not().isEmpty().withMessage(ValidationMessages.BrandRequired);
+};
+
+const validateLicensePlate = (isOptional = false) => {
+    const validator = body('license_plate')
+        .trim().isLength({ min: 6 }).withMessage(ValidationMessages.LicensePlateMinLength)
+        .isLength({ max: 6 }).withMessage(ValidationMessages.LicensePlateMaxLength)
         .custom(async (value) => {
-            const clientType = await ClientType.findOne({ where: { client_type: value } });
-            if (clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeInUse);
+            const vehicle = await Vehicle.findOne({ where: { liscense_plate: value } });
+            if ( vehicle ) {
+                return Promise.reject( ValidationMessages.LicensePlateInUse );
             }
         });
 
     return isOptional 
         ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.ClientTypeRequired);
+        : validator.not().isEmpty().withMessage(ValidationMessages.LicensePlateRequired);
 };
 
-const validateDescription = (isOptional = false) => {
-    const validator = body('description')
-        .trim()
-        .isLength({ min: 10 })
-        .withMessage(ValidationMessages.DescriptionMinLength)
-        .isLength({ max: 200 })
-        .withMessage(ValidationMessages.DescriptionMaxLength);
 
-    return isOptional 
-        ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.DescriptionRequired);
-};
-
-const validateClientTypeId = () => {
-    return body('client_type_id')
-        .not().isEmpty()
-        .withMessage(ValidationMessages.ClientTypeIdRequired)
-        .custom(async (value) => {
-            const clientType = await ClientType.findByPk(value);
-            if (!clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeNotFound);
-            }
-        });
-};
-
-const createClientTypeValidator = () => [
-    validateClientTypeName(),
-    validateDescription()
+const createVehicleValidator = () => [
+    validateBrand(),
+    validateVehicleTypeId(),
+    validateContactId(true),
+    validateLicensePlate(),
+    validateColor(),
+    validateDescription(),
+    validateCreateUserId()
 ];
 
-const updateClientTypeValidator = () => [
-    validateClientTypeId(),
-    validateClientTypeName(true),
-    validateDescription(true)
+const updateVehicleValidator = () => [
+    validateBrand(true),
+    validateVehicleTypeId(true),
+    validateContactId(true),
+    validateLicensePlate(true),
+    validateColor(true),
+    validateDescription(true),
+    validateUpdateUserId()
 ];
 
-const getClientTypeValidator = () => [
-    validateClientTypeId()
+const getVehicleValidator = () => [
+    validateVehicleId()
 ];
 
 const searchValidator = () => [
-    validateClientTypeName(true),
-    validateDescription(true)
+    validateBrand(true),
+    validateBrand(true),
+    validateVehicleTypeId(true),
+    validateContactId(true),
+    validateLicensePlate(true),
+    validateColor(true),
+    validateDescription(true),
 ];
 
-export { createClientTypeValidator, updateClientTypeValidator, getClientTypeValidator, searchValidator };
+export { createVehicleValidator, updateVehicleValidator, getVehicleValidator, searchValidator };
