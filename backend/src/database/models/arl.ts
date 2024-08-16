@@ -24,7 +24,6 @@ class Arl extends Model<ArlAttributes, ArlCreationAttributes> implements ArlAttr
     public readonly updatedAt!: Date;
 }
 
-
 Arl.init({
     id: {
         primaryKey: true,
@@ -48,7 +47,7 @@ Arl.init({
     },
     updated_by: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
     },
 }, {
     sequelize,
@@ -56,16 +55,6 @@ Arl.init({
     modelName: 'Arl',
     timestamps: true,
     underscored: true
-});
-
-Arl.belongsTo(User, {
-    foreignKey: 'created_by',
-    as: 'arl_created_by',
-});
-
-Arl.belongsTo(User, {
-    foreignKey: 'updated_by',
-    as: 'arl_updated_by',
 });
 
 export { Arl, ArlAttributes, ArlCreationAttributes };

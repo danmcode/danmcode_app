@@ -10,6 +10,7 @@ import DropDownListController from './components/dropdown.list/dropdown.list.con
 import DropDownListItemController from './components/dropdown.list.item/dropdown.list.item.controller';
 import JobTitleController from './components/job.title/job.title.controller';
 import ContactController from './components/contact/contact.controller';
+import ArlController from './components/arl/arl.controller';
 /**
  *
  * The registerControllerRoutes function creates an Express Router instance and
@@ -50,6 +51,7 @@ export default function registerRoutes(): Router {
             new SubLocationController(),
             new JobTitleController(),
             new ContactController(),
+            new ArlController(),
         ];
 
         controllers.forEach((controller) => {

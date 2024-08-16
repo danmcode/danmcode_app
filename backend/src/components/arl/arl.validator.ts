@@ -1,69 +1,45 @@
 import { body, param } from 'express-validator';
 import { ValidationMessages } from './validation.messages';
-import { ClientType } from '../../database/models/client.type.model';
+import { Arl } from '../../database/models/arl';
+import { validateARLId, validateCreateUserId, validateDescription, validateUpdateUserId } from '../../lib/global.validators';
 
-const validateClientTypeName = (isOptional = false) => {
-    const validator = body('client_type')
+const validateARLName = (isOptional = false) => {
+    const validator = body('arl')
         .trim()
         .isLength({ min: 3 })
-        .withMessage(ValidationMessages.ClientTypeMinLength)
+        .withMessage(ValidationMessages.ARLMinLength)
         .isLength({ max: 50 })
-        .withMessage(ValidationMessages.ClientTypeMaxLength)
+        .withMessage(ValidationMessages.ARLMaxLength)
         .custom(async (value) => {
-            const clientType = await ClientType.findOne({ where: { client_type: value } });
-            if (clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeInUse);
+            const arl = await Arl.findOne({ where: { arl: value } });
+            if (arl) {
+                return Promise.reject(ValidationMessages.ARLInUse);
             }
         });
 
     return isOptional 
         ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.ClientTypeRequired);
+        : validator.not().isEmpty().withMessage(ValidationMessages.ARLRequired);
 };
 
-const validateDescription = (isOptional = false) => {
-    const validator = body('description')
-        .trim()
-        .isLength({ min: 10 })
-        .withMessage(ValidationMessages.DescriptionMinLength)
-        .isLength({ max: 200 })
-        .withMessage(ValidationMessages.DescriptionMaxLength);
-
-    return isOptional 
-        ? validator.optional() 
-        : validator.not().isEmpty().withMessage(ValidationMessages.DescriptionRequired);
-};
-
-const validateClientTypeId = () => {
-    return body('client_type_id')
-        .not().isEmpty()
-        .withMessage(ValidationMessages.ClientTypeIdRequired)
-        .custom(async (value) => {
-            const clientType = await ClientType.findByPk(value);
-            if (!clientType) {
-                return Promise.reject(ValidationMessages.ClientTypeNotFound);
-            }
-        });
-};
-
-const createClientTypeValidator = () => [
-    validateClientTypeName(),
-    validateDescription()
+const createARLValidator = () => [
+    validateARLName(),
+    validateCreateUserId()
 ];
 
-const updateClientTypeValidator = () => [
-    validateClientTypeId(),
-    validateClientTypeName(true),
-    validateDescription(true)
+const updateARLValidator = () => [
+    validateARLId(),
+    validateARLName(true),
+    validateUpdateUserId()
 ];
 
-const getClientTypeValidator = () => [
-    validateClientTypeId()
+const getARLValidator = () => [
+    validateARLId()
 ];
 
 const searchValidator = () => [
-    validateClientTypeName(true),
+    validateARLName(true),
     validateDescription(true)
 ];
 
-export { createClientTypeValidator, updateClientTypeValidator, getClientTypeValidator, searchValidator };
+export { createARLValidator, updateARLValidator, getARLValidator, searchValidator };

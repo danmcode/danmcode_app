@@ -1,14 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
-import { ClientType, ClientTypeAttributes, ClientTypeCreationAttributes } from "../../database/models/client.type.model";
+import { Arl, ArlAttributes, ArlCreationAttributes } from "../../database/models/arl";
 
-export class ClientTypeService {
+export class ArlService {
 
-    async create(payload: ClientTypeCreationAttributes): Promise<ClientTypeAttributes> {
+    async create(payload: ArlCreationAttributes): Promise<ArlAttributes> {
         try {
-            const clientType = await ClientType.create(payload);
-            return clientType;
+            const arl = await Arl.create(payload);
+            return arl;
         } catch (error) {
             logger.error(error);
             throw error;
@@ -17,47 +17,47 @@ export class ClientTypeService {
 
     async find() {
         try {
-            const clientTypes = await ClientType.findAll({ where: { is_active: true } });
-            return clientTypes;
+            const arls = await Arl.findAll({ where: { is_active: true } });
+            return arls;
         } catch (error) {
             logger.error(error);
             throw error
         }
     }
 
-    async findOne(id: string): Promise<ClientType> {
+    async findOne(id: string): Promise<Arl> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            return clientType!;
+            const arl = await Arl.findByPk(id);
+            return arl!;
         } catch (error) {
             logger.error(error);
             throw new ApiError(`Id: ${id} No encontrado`, StatusCodes.NOT_FOUND);
         }
     }
 
-    async update(id: string, payload: ClientTypeCreationAttributes): Promise<ClientType> {
+    async update(id: string, payload: ArlCreationAttributes): Promise<Arl> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            if (!clientType) {
-                throw new ApiError('Rol no encontrado', StatusCodes.NOT_FOUND);
+            const arl = await Arl.findByPk(id);
+            if (!arl) {
+                throw new ApiError('Arl no encontrada', StatusCodes.NOT_FOUND);
             }
 
-            const updatedRol = await clientType!.update(payload);
+            const updatedRol = await arl!.update(payload);
             return updatedRol;
 
         } catch (error) {
-            logger.error({ error, 'updated': 'update clientType' });
+            logger.error({ error, 'updated': 'update arl' });
             throw error
         }
     }
 
     async delete(id: string): Promise<boolean> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            console.log(clientType);
-            if (clientType) {
-                clientType.is_active = false;
-                await clientType.save();
+            const arl = await Arl.findByPk(id);
+            console.log(arl);
+            if (arl) {
+                arl.is_active = false;
+                await arl.save();
                 return true;
             }
 
@@ -69,10 +69,10 @@ export class ClientTypeService {
         }
     }
 
-    async search(query: any): Promise<ClientType[]> {
+    async search(query: any): Promise<Arl[]> {
         try {
-            const clientTypes = await ClientType.findAll({ where: query });
-            return clientTypes;
+            const arls = await Arl.findAll({ where: query });
+            return arls;
         } catch (error) {
             logger.error(error);
             throw error

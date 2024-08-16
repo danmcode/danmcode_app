@@ -5,27 +5,27 @@ import { validationResult } from 'express-validator';
 import logger from '../../lib/logger';
 import { Op } from 'sequelize';
 import { RouteDefinition } from '../../types/route.definition';
-import { IdentificationTypeAttributes } from '../../database/models/identification.type';
-import { IdentificationTypeService } from '../identification.type/identification.type.service';
-import { createIdentificationTypeValidator, getIdentificationTypeValidator, searchValidator, updateIdentificationTypeValidator } from '../identification.type/identification.type.validator';
+import { ArlService } from './arl.service';
+import { createARLValidator, getARLValidator, searchValidator, updateARLValidator } from './arl.validator';
+import { ArlAttributes } from '../../database/models/arl';
 
-export default class IdentificationTypeController extends BaseController {
+export default class ArlController extends BaseController {
 
-    private identificationType: IdentificationTypeService;
-    public basePath = 'identification-types';
+    private arl: ArlService;
+    public basePath = 'arl';
 
     constructor() {
         super();
-        this.identificationType = new IdentificationTypeService();
+        this.arl = new ArlService();
     }
 
     public routes(): RouteDefinition[] {
         return [
-            { path: '/', method: 'post', handler: this.createIdentificationType.bind(this), validator: createIdentificationTypeValidator() },
-            { path: '/', method: 'get', handler: this.getIdentificationTypes.bind(this) },
-            { path: '/get-identification-type', method: 'post', handler: this.getIdentificationType.bind(this), validator: getIdentificationTypeValidator() },
-            { path: '/update', method: 'post', handler: this.updateIdentificationType.bind(this), validator: updateIdentificationTypeValidator() },
-            { path: '/delete', method: 'post', handler: this.delete.bind(this), validator: getIdentificationTypeValidator() },
+            { path: '/', method: 'post', handler: this.createArl.bind(this), validator: createARLValidator() },
+            { path: '/', method: 'get', handler: this.getArls.bind(this) },
+            { path: '/get-arl', method: 'post', handler: this.getArl.bind(this), validator: getARLValidator() },
+            { path: '/update', method: 'post', handler: this.updateArl.bind(this), validator: updateARLValidator() },
+            { path: '/delete', method: 'post', handler: this.delete.bind(this), validator: getARLValidator() },
             { path: '/search', method: 'post', handler: this.search.bind(this), validator: searchValidator()},
         ];
     }
@@ -34,7 +34,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async createIdentificationType(req: Request, res: Response): Promise<void> {
+    public async createArl(req: Request, res: Response): Promise<void> {
         try {
 
             let errors = validationResult(req);
@@ -45,10 +45,10 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType: IdentificationTypeAttributes = await this.identificationType.create(req.body);
+            const arl: ArlAttributes = await this.arl.create(req.body);
 
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            res.locals.data = { arl };
+            logger.info(arl);
             return super.send(res, StatusCodes.CREATED);
 
         } catch (error) {
@@ -62,11 +62,11 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async getIdentificationTypes(_: Request, res: Response): Promise<void> {
+    public async getArls(_: Request, res: Response): Promise<void> {
         try {
 
-            const identificationTypes = await this.identificationType.find();
-            res.locals.data = { identificationTypes };
+            const arls = await this.arl.find();
+            res.locals.data = { arls };
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
@@ -82,7 +82,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async getIdentificationType(req: Request, res: Response): Promise<void> {
+    public async getArl(req: Request, res: Response): Promise<void> {
         try {
             let errors = validationResult(req);
 
@@ -92,15 +92,15 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType = await this.identificationType.findOne(req.body.identification_type_id);
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            const arl = await this.arl.findOne(req.body.arl_id);
+            res.locals.data = { arl };
+            logger.info(arl);
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
 
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'arl.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
 
         }
@@ -110,7 +110,7 @@ export default class IdentificationTypeController extends BaseController {
      * @param req
      * @param res
      */
-    public async updateIdentificationType(req: Request, res: Response): Promise<void> {
+    public async updateArl(req: Request, res: Response): Promise<void> {
         try {
             let errors = validationResult(req);
 
@@ -120,15 +120,15 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const identificationType = await this.identificationType.update(req.body.identification_type_id, req.body);
-            res.locals.data = { identificationType };
-            logger.info(identificationType);
+            const arl = await this.arl.update(req.body.arl_id, req.body);
+            res.locals.data = { arl };
+            logger.info(arl);
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
 
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'arl.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
@@ -149,19 +149,19 @@ export default class IdentificationTypeController extends BaseController {
                 return super.send(res, StatusCodes.BAD_REQUEST)
             }
 
-            const id = req.body.identification_type_id;
-            const status: boolean = await this.identificationType.delete(id);
+            const id = req.body.arl_id;
+            const status: boolean = await this.arl.delete(id);
 
             res.locals.data = {
                 status,
-                'msg': `Tipo de identificatione con id: ${id}, eliminado`
+                'msg': `Arl con id: ${id}, eliminado`
             };
 
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'arl.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }
@@ -183,15 +183,15 @@ export default class IdentificationTypeController extends BaseController {
                 }
             }
 
-            const identificationTypes = await this.identificationType.search(conditions);
-            res.locals.data = { identificationTypes };
-            logger.info(identificationTypes);
+            const arls = await this.arl.search(conditions);
+            res.locals.data = { arls };
+            logger.info(arls);
 
             return super.send(res, StatusCodes.OK);
 
         } catch (error) {
             res.locals.data = { error: error }
-            logger.error({ error, 'file': 'identificationType.ts' });
+            logger.error({ error, 'file': 'arl.ts' });
             return super.send(res, StatusCodes.BAD_REQUEST);
         }
     }

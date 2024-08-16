@@ -2,9 +2,9 @@ export enum GlobalValidationMessages {
 
     InvalidId = 'No es un ID vallido',
         
-    DescriptionRequired = 'La descripción del cargo no puede estar vacía',
-    DescriptionMinLength = 'La descripción del cargo debe tener al menos 10 caracteres',
-    DescriptionMaxLength = 'La descripción del cargo no puede tener más de 200 caracteres',
+    DescriptionRequired = 'La descripción no puede estar vacía',
+    DescriptionMinLength = 'La descripción debe tener al menos 10 caracteres',
+    DescriptionMaxLength = 'La descripción no puede tener más de 200 caracteres',
     
     JobTitleIdRequired = 'El ID del cargo no puede estar vacío',
     JobTitleNotFound = 'El cargo no existe',
@@ -32,4 +32,7 @@ export enum GlobalValidationMessages {
 
     ContactIdRequired = 'El ID del del contacto es requerido',
     ContactNotFound = 'El contacto no existe',
+    
+    ARLIdRequired = 'El ID de la ARL no puede estar vacío',
+    ARLNotFound = 'La ARL no existe'
 }

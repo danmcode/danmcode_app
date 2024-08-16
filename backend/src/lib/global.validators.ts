@@ -7,6 +7,7 @@ import { JobTitle } from "../database/models/job.titles.model";
 import { DropDownListItem } from "../database/models";
 import { SubLocation } from "../database/models/sub.location";
 import { Contact } from "../database/models/contact";
+import { Arl } from "../database/models/arl";
 
 const validateCreateUserId = () => {
     return body('created_by')
@@ -66,9 +67,9 @@ const validateDescription = (isOptional = false) => {
     const validator = body('description')
         .trim()
         .isLength({ min: 10 })
-        .withMessage(ValidationMessages.DescriptionMinLength)
+        .withMessage(GlobalValidationMessages.DescriptionMinLength)
         .isLength({ max: 200 })
-        .withMessage(ValidationMessages.DescriptionMaxLength);
+        .withMessage(GlobalValidationMessages.DescriptionMaxLength);
 
     return isOptional
         ? validator.optional()
@@ -121,6 +122,21 @@ const validateResidentTypeId = (isOptional = false) => {
         : validator.not().isEmpty().withMessage(GlobalValidationMessages.ResidentTypeIdRequired)
 };
 
+const validateARLId = (isOptional = false) => {
+    const validator = body('arl_id')
+        .isUUID().withMessage(GlobalValidationMessages.InvalidId)
+        .custom(async (value) => {
+            const residentType = await Arl.findByPk(value);
+            if (!residentType) {
+                return Promise.reject(GlobalValidationMessages.ARLNotFound);
+            }
+        });
+
+    return isOptional
+        ? validator.optional()
+        : validator.not().isEmpty().withMessage(GlobalValidationMessages.ARLIdRequired)
+};
+
 const validateContactId = () => {
     return body('contact_id')
         .not().isEmpty()
@@ -144,4 +160,5 @@ export {
     validateResidentTypeId,
     validateSubLocationId,
     validateContactId,
+    validateARLId
 }

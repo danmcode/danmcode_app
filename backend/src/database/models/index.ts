@@ -7,6 +7,7 @@ import { Location } from './location';
 import { SubLocation } from './sub.location';
 import { JobTitle } from './job.titles.model';
 import { Contact } from './contact';
+import { Arl } from './arl';
 
 DropDownList.hasMany(DropDownListItem, { foreignKey: 'list_id', as: 'dropdown_list_items' });
 DropDownListItem.belongsTo(DropDownList, { foreignKey: 'list_id', as: 'dropdown_list' });
@@ -41,5 +42,9 @@ Contact.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
 Contact.belongsTo(SubLocation, { foreignKey: 'sub_location_id', as: 'sub_location' });
 Contact.belongsTo(User, { foreignKey: 'created_by', as: 'contact_created_by' });
 Contact.belongsTo(User, { foreignKey: 'updated_by', as: 'contact_updated_by' });
+
+Arl.belongsTo(User, { foreignKey: 'created_by', as: 'arl_created_by' });
+Arl.belongsTo(User, { foreignKey: 'updated_by', as: 'arl_updated_by' });
+
 
 export { DropDownList, DropDownListItem };
