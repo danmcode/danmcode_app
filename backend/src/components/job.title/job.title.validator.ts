@@ -28,16 +28,16 @@ const validateJobTitleName = (isOptional = false) => {
 const createJobTitleValidator = () => [
     validateJobTitleName(),
     validateDescription(),
-    validateClientId(false, ValidationMessages.ClientIdRequired, ValidationMessages.ClientNotFound),
-    validateCreateUserId(ValidationMessages.UserIdRequired, ValidationMessages.UserNotFound)
+    validateClientId(false),
+    validateCreateUserId()
 ];
 
 const updateJobTitleValidator = () => [
     validateJobTitleId(),
     validateJobTitleName(true),
     validateDescription(true),
-    validateClientId(true, ValidationMessages.ClientIdRequired, ValidationMessages.ClientNotFound),
-    validateUpdateUserId(ValidationMessages.UserIdRequired, ValidationMessages.UserNotFound)
+    validateClientId(true),
+    validateUpdateUserId()
 ];
 
 const getJobTitleValidator = () => [

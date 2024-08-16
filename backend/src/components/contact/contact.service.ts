@@ -1,14 +1,34 @@
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../abstractions/api.error";
 import logger from "../../lib/logger";
-import { ClientType, ClientTypeAttributes, ClientTypeCreationAttributes } from "../../database/models/client.type.model";
+import { Contact, ContactAttributes, ContactCreationAttributes } from "../../database/models/contact";
+import { User, UserAttributesExclude } from "../../database/models/user.model";
+import { DropDownListItem } from "../../database/models";
+import { JobTitle } from "../../database/models/job.titles.model";
+import { Client } from "../../database/models/client.model";
+import { SubLocation } from "../../database/models/sub.location";
+import { Location } from "../../database/models/location";
+import { Includeable } from "sequelize";
 
-export class ClientTypeService {
+const includes: Includeable[] = [
+    { model: User, as: 'user', attributes: { exclude: UserAttributesExclude } },
+    { model: Client, as: 'client' },
+    {
+        model: SubLocation, as: 'sub_location', include: [
+            { model: Location, as: 'location' }
+        ]
+    },
+    { model: DropDownListItem, as: 'contact_type' },
+    { model: DropDownListItem, as: 'resident_type' },
+    { model: JobTitle, as: 'job_title' },
+]
 
-    async create(payload: ClientTypeCreationAttributes): Promise<ClientTypeAttributes> {
+export class ContactService {
+
+    async create(payload: ContactCreationAttributes): Promise<ContactAttributes> {
         try {
-            const clientType = await ClientType.create(payload);
-            return clientType;
+            const contact = await Contact.create(payload);
+            return contact;
         } catch (error) {
             logger.error(error);
             throw error;
@@ -17,47 +37,58 @@ export class ClientTypeService {
 
     async find() {
         try {
-            const clientTypes = await ClientType.findAll({ where: { is_active: true } });
-            return clientTypes;
+            const contacts = await Contact.findAll({
+                where: { is_active: true },
+                include: includes
+            });
+            return contacts;
         } catch (error) {
             logger.error(error);
             throw error
         }
     }
 
-    async findOne(id: string): Promise<ClientType> {
+    async findOne(id: string): Promise<Contact> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            return clientType!;
+            const contact = await Contact.findByPk(id, {
+                include: includes
+            });
+            return contact!;
         } catch (error) {
             logger.error(error);
             throw new ApiError(`Id: ${id} No encontrado`, StatusCodes.NOT_FOUND);
         }
     }
 
-    async update(id: string, payload: ClientTypeCreationAttributes): Promise<ClientType> {
+    async update(id: string, payload: ContactCreationAttributes): Promise<Contact> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            if (!clientType) {
-                throw new ApiError('Rol no encontrado', StatusCodes.NOT_FOUND);
+            const contact = await Contact.findByPk(id);
+            if (!contact) {
+                throw new ApiError('Contacto no encontrado', StatusCodes.NOT_FOUND);
             }
 
-            const updatedRol = await clientType!.update(payload);
-            return updatedRol;
+            const updatedContact = await contact!.update(payload);
+
+            const contacWithRelations = await Contact.findByPk(updatedContact.id, {
+                include: includes
+            });
+
+            return contacWithRelations as Contact;
+
 
         } catch (error) {
-            logger.error({ error, 'updated': 'update clientType' });
+            logger.error({ error, 'updated': 'update contact' });
             throw error
         }
     }
 
     async delete(id: string): Promise<boolean> {
         try {
-            const clientType = await ClientType.findByPk(id);
-            console.log(clientType);
-            if (clientType) {
-                clientType.is_active = false;
-                await clientType.save();
+            const contact = await Contact.findByPk(id);
+
+            if (contact) {
+                contact.is_active = false;
+                await contact.save();
                 return true;
             }
 
@@ -69,10 +100,10 @@ export class ClientTypeService {
         }
     }
 
-    async search(query: any): Promise<ClientType[]> {
+    async search(query: any): Promise<Contact[]> {
         try {
-            const clientTypes = await ClientType.findAll({ where: query });
-            return clientTypes;
+            const contacts = await Contact.findAll({ where: query, include: includes });
+            return contacts;
         } catch (error) {
             logger.error(error);
             throw error

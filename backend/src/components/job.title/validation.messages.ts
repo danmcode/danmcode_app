@@ -11,11 +11,4 @@ export enum ValidationMessages {
     
     JobTitleIdRequired = 'El ID del cargo no puede estar vacío',
     JobTitleNotFound = 'El cargo no existe',
-
-    ClientIdRequired = 'El ID del cliente no puede estar vacío',
-    ClientNotFound = 'El cliente no existe',
-
-    UserIdRequired = 'El ID del usuario no puede estar vacío',
-    UserNotFound = 'El usuario no existe'
-
 }

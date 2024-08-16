@@ -149,4 +149,18 @@ User.belongsTo(Role, {
     as: 'role',
 });
 
-export { User, UserAttributes, UserCreationAttributes };
+const UserAttributesExclude = [
+    'email_verified',
+    'email_verified_at',
+    'password',
+    'is_active',
+    'is_contact',
+    'is_user_active',
+    'identification_type_id',
+    'role_id',
+    'token',
+    'is_blocked',
+    'first_login'
+]
+
+export { User, UserAttributes, UserCreationAttributes, UserAttributesExclude };

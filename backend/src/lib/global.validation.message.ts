@@ -1,4 +1,6 @@
 export enum GlobalValidationMessages {
+
+    InvalidId = 'No es un ID vallido',
         
     DescriptionRequired = 'La descripción del cargo no puede estar vacía',
     DescriptionMinLength = 'La descripción del cargo debe tener al menos 10 caracteres',
@@ -19,10 +21,15 @@ export enum GlobalValidationMessages {
     UserIdRequired = 'El ID del usuario no puede estar vacío',
     UserNotFound = 'El usuario no existe',
 
+    UserIdCreatedRequired = 'El ID del usuario que esta creando no puede estar vacío',
+    UserCreatedNotFound = 'El usuario que esta creando no existe',
+
+    UserIdUpdatedRequired = 'El ID del usuario que esta actualizando no puede estar vacío',
+    UserUpdatedNotFound = 'El usuario que esta actualizando no existe',
+
     ContactTypeIdRequired = 'El ID del tipo de contacto es requerido',
     ContactTypeNotFound = 'El tipo de contacto no existe',
 
     ContactIdRequired = 'El ID del del contacto es requerido',
     ContactNotFound = 'El contacto no existe',
-
 }
