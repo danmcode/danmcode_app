@@ -36348,3 +36348,11 @@ a[href].bg-body-secondary:hover, a[href].bg-body-secondary:focus {
   box-shadow: none;
   border: none;
 }
+
+.config-dropdown-item {
+  display: flex;
+  align-items: center,;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: pointer;
+}

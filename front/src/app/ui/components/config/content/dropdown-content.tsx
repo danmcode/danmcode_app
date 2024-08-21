@@ -1,5 +1,24 @@
+import ListItem from "./dropdown-item";
 
 export default function DropDownContent() {
+
+    const items = [
+        { id: 1, text: 'Tipos de Identificación' },
+        { id: 2, text: 'Tipos de Cliente' },
+        { id: 3, text: 'Tipos de Contacto' },
+    ];
+
+    const handleEdit = (id: number) => {
+        console.log(`Edit item with id: ${id}`);
+    };
+
+    const handleDelete = (id: number) => {
+        console.log(`Delete item with id: ${id}`);
+    };
+
+    const handleClick = (id: number) => {
+        console.log(`Clicked on item with id: ${id}`);
+    };
 
     return (
         <div className="row g-3">
@@ -19,9 +38,16 @@ export default function DropDownContent() {
                             </div>
                         </div>
                         <ul className="list-group list-group-flush">
-                            <li className="list-group-item">Tipos de identificación</li>
-                            <li className="list-group-item">Tipos de cliente</li>
-                            <li className="list-group-item"> Tipos de vehiculo</li>
+                            {items.map(item => (
+                                <ListItem
+                                    key={item.id}
+                                    id={item.id}
+                                    text={item.text}
+                                    onEdit={handleEdit}
+                                    onClick={handleClick}
+                                    onDelete={handleDelete}
+                                />
+                            ))}
                         </ul>
                     </div>
                 </div>
