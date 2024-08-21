@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { SideBarLinks } from "@/app/ui/components/sidebar/side-bar-links";
 import Menu from "@/app/ui/components/sidebar/menu";
 import SideBarFooter from './side-bar-footer';
