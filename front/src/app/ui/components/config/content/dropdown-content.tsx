@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import ListItem from "./dropdown-item";
 import BootstrapModal from "../../bootstrap-modal";
+import ListForm from "./lists/list-form";
 
 export default function DropDownContent() {
     const [showModal, setShowModal] = useState(false);
@@ -13,13 +14,13 @@ export default function DropDownContent() {
 
     const handleEdit = (id: number) => {
         setModalTitle(`Editar nombre de lista: ${id}`);
-        setModalContent(`Editar nombre de lista: ${id}`);
+        setModalContent(<ListForm />);
         setShowModal(true);
     };
 
     const handleAdd = () => {
         setModalTitle("Crear una nueva lista");
-        setModalContent("Add new item content goes here.");
+        setModalContent(<ListForm />);
         setShowModal(true);
     };
 

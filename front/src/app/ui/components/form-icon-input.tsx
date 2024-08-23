@@ -22,6 +22,7 @@ export default function FormIconInput( props : Props ) {
           id= {id}
           type= {type}
           placeholder= { placeHolder }
+          autoComplete="off" 
         />
         <label className="text-body-tertiary form-icon-label">
             { label }
