@@ -1,3 +1,5 @@
+"use client";
+
 import ListItem from "./dropdown-item";
 
 export default function DropDownContent() {

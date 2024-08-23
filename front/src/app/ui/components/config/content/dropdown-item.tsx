@@ -21,6 +21,7 @@ export default function ListItem({ id, text, onEdit, onDelete, onClick }: ListIt
             onMouseEnter={() => setShowButtons(true)}
             onMouseLeave={() => setShowButtons(false)}
             onClick={() => onClick(id)}
+            id={id.toString()}
         >
             <span className='text-sm'>{text}</span>
             {showButtons && (

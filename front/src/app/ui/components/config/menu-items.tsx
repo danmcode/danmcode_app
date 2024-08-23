@@ -8,20 +8,20 @@ export const ConfigMenuItems = [
         id: "dropDownListTab",
         target: "dropDownListTabContent",
         name: "Listas desplegables",
-        content: DropDownContent(),
+        content: <DropDownContent />
     },
     {
         icon: faUserShield,
         id: "RolesTab",
         target: "RolesTabContent",
         name: "Roles",
-        content: RolesContent()
+        content: <RolesContent />
     },
     {
         icon: faCheck,
         id: "PermisosTab",
         target: "PermisosTabContent",
         name: "Permisos",
-        content: RolesContent()
+        content: <RolesContent />
     },
 ]
