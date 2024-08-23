@@ -20,7 +20,7 @@ export default function ListItem({ id, text, onEdit, onDelete, onClick }: ListIt
         <li className='config-dropdown-item list-group-item'
             onMouseEnter={() => setShowButtons(true)}
             onMouseLeave={() => setShowButtons(false)}
-            onClick={() => onClick(id)}
+            onClick={(e) => { e.stopPropagation(); onClick(id); }}
             id={id.toString()}
         >
             <span className='text-sm'>{text}</span>

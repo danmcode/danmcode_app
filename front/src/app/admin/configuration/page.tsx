@@ -27,7 +27,8 @@ export default function ConfigurationPage() {
                                     icon: menuItem.icon,
                                     id: menuItem.id,
                                     target: menuItem.target,
-                                    name: menuItem.name
+                                    name: menuItem.name,
+                                    index: index
                                 }}></ConfigMenu>
                             );
                         })}
@@ -42,6 +43,7 @@ export default function ConfigurationPage() {
                                 <ConfigMenuContent
                                     configMenu={{
                                         id: menuItem.target,
+                                        index: index,
                                         children: menuItem.content
                                     }}
                                 />

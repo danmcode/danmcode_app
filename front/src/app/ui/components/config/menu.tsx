@@ -7,6 +7,7 @@ interface Props {
         id: string;
         target: string;
         name: String;
+        index: number
     }
 }
 
@@ -14,7 +15,7 @@ export default function ConfigMenu(props: Props) {
     const { configMenu } = props;
 
     return (
-        <a className="nav-link border-end border-end-sm-0 border-bottom-sm text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
+        <a className={`nav-link border-end border-end-sm-0 border-bottom-sm text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center ${configMenu.index === 0 ? 'active' : ''}`}
             id={`${configMenu.id}`}
             data-bs-toggle="tab"
             data-bs-target={`#${configMenu.target}`}
