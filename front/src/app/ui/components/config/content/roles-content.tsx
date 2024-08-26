@@ -1,17 +1,43 @@
+"use client"
 
-export default function RolesContent () {
+import { Rol } from "@/app/lib/domain/entities/rol.entity";
+import { useEffect, useState } from "react";
 
-    return(
+export default function RolesContent() {
 
-        <div className="row g-3 flex-1 mb-4">
-        <div className="col-sm-7">
-            <input className="form-control" type="number" placeholder="Quantity" />
+    const [rol, setRol] = useState<Rol | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const fetchedUsers = await Rol.getAll();
+                fetchedUsers.forEach((role: Rol) => {
+                    console.log(role.id); // Accede a la propiedad 'id' de cada rol
+                });
+                // setRol(fetchedUser);
+            } catch (error) {
+                console.error('Failed to fetch user', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUser();
+    });
+
+    if (loading) return <div>Loading...</div>;
+
+    return (
+        <div>
+            <h1>User Details</h1>
+            {rol && (
+                <div>
+                    <h2>{rol.role_name}</h2>
+                    <p>{rol.description}</p>
+                </div>
+            )}
         </div>
-        <div className="col-sm">
-            <button className="btn btn-primary" type="button"><span className="fa-solid fa-check me-1 fs-10"></span>Confirm</button>
-        </div>
-    </div>
-
     );
 
 }

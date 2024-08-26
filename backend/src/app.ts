@@ -42,9 +42,10 @@ export default class App {
 		// add multiple cors options as per your use
 		const corsOptions = {
 			origin: [
-				'http://localhost:8080/',
-				'http://example.com/',
+				'http://localhost:8080',
+				'http://example.com',
 				'http://127.0.0.1:8080',
+				'http://localhost:3000'
 			],
 		};
 		this.express.use(cors(corsOptions));
