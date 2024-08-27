@@ -1,6 +1,5 @@
 import { Model, DataTypes, Optional, UUIDV4 } from 'sequelize';
 import sequelize from '../index';
-import { User } from './user.model';
 
 interface RoleAttributes {
     id: string;
