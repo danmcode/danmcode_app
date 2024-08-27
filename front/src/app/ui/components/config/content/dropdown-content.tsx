@@ -9,6 +9,8 @@ export default function DropDownContent() {
     const [showModal, setShowModal] = useState(false);
     const [modalTitle, setModalTitle] = useState<string>("");
     const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+    const [selectedItems, setSelectedItems] = useState<string[]>([]); // Estado para los elementos seleccionados
+    const [currentList, setCurrentList] = useState<string | null>(null); // Estado para la lista actual seleccionada
 
     const handleClose = () => setShowModal(false);
 
@@ -28,8 +30,33 @@ export default function DropDownContent() {
         console.log(`Delete item with id: ${id}`);
     };
 
-    const handleClick = (id: number) => {
-        console.log(`Clicked on item with id: ${id}`);
+    const handleClick = async (id: number) => {
+        const listItem = items.find(item => item.id === id);
+        if (listItem) {
+            setCurrentList(listItem.text); // Establece la lista actual seleccionada
+            const response = await fetchItemsForList(listItem.text as ListName);
+            setSelectedItems(response);
+        }
+    };
+
+    // Definición de los tipos de nombres de listas permitidos
+    type ListName = 'Tipos de Identificación' | 'Tipos de Cliente' | 'Tipos de Contacto';
+
+    // Simula una petición a una API
+    const fetchItemsForList = async (listName: ListName) => {
+        // Aquí puedes hacer una llamada a una API real o simular una respuesta
+        // Para este ejemplo, vamos a simular la respuesta
+        const simulatedResponses: Record<ListName, string[]> = {
+            "Tipos de Identificación": ["Cédula", "Pasaporte", "Licencia de Conducir"],
+            "Tipos de Cliente": ["Corporativo", "Individual", "Mixto"],
+            "Tipos de Contacto": ["Email", "Teléfono", "Redes Sociales"]
+        };
+
+        return new Promise<string[]>(resolve => {
+            setTimeout(() => {
+                resolve(simulatedResponses[listName]);
+            }, 1000); // Simula un retraso de 1 segundo
+        });
     };
 
     const items = [
@@ -44,7 +71,7 @@ export default function DropDownContent() {
                 <div className="card">
                     <div className="card-body">
                         <div className="card-title">
-                            <div className="row ">
+                            <div className="row">
                                 <div className="col-10 align-self-center">
                                     <h5>Listas</h5>
                                 </div>
@@ -76,9 +103,11 @@ export default function DropDownContent() {
             <div className="col-12 col-lg-6">
                 <div className="card">
                     <div className="card-body">
-                        <h5 className="card-title">Elementos</h5>
+                        <h5 className="card-title">{currentList || "Elementos"}</h5>
                         <ul className="list-group list-group-flush">
-                            {/* Aquí puedes agregar más lógica para los elementos */}
+                            {selectedItems.map((item, index) => (
+                                <li key={index} className="list-group-item">{item}</li>
+                            ))}
                         </ul>
                     </div>
                 </div>
