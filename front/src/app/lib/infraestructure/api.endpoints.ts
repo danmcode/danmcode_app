@@ -1,20 +1,20 @@
 import apiClient from './api.client';
 
 const handleApiError = (error: any) => {
-    console.error('API Error:', error);
-    throw new Error('An error occurred while communicating with the API.');
-  };
+  console.error('API Error:', error);
+  throw new Error('An error occurred while communicating with the API.');
+};
 
-  export const fetchResource = async (resource: string, id?: string) => {
+export const fetchResource = async (resource: string, id?: string) => {
+  try {
 
-    try {
-        const url = id ? `/${resource}/${id}` : `/${resource}`;
-        const response = await apiClient.get(url);
-        return response.data;
-    } catch (error) {
-        handleApiError(error);
-    }
+    const url = id ? `/${resource}/${id}` : `/${resource}`;
+    const response = await apiClient.get(url);
+    return response.data;
 
+  } catch (error) {
+    handleApiError(error);
+  }
 };
 
 export const createResource = async (resource: string, data: any) => {

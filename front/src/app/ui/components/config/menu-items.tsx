@@ -1,6 +1,6 @@
 import { faCheck, faListDots, faUsers, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import DropDownContent from "./content/dropdown-content";
-import RolesContent from "./content/roles-content";
+import RolesContent from "./content/roles/roles-content";
 
 export const ConfigMenuItems = [
     {
@@ -8,7 +8,7 @@ export const ConfigMenuItems = [
         id: "UsersTab",
         target: "userTabContent",
         name: "Usuarios",
-        content: <>a</>
+        content: <>Usuarios</>
     },
     {
         icon: faUserShield,
@@ -18,17 +18,17 @@ export const ConfigMenuItems = [
         content: <RolesContent />
     },
     {
+        icon: faCheck,
+        id: "PermisosTab",
+        target: "PermisosTabContent",
+        name: "Permisos",
+        content: <> Permisos </>
+    },
+    {
         icon: faListDots,
         id: "dropDownListTab",
         target: "dropDownListTabContent",
         name: "Listas desplegables",
         content: <DropDownContent />
-    },
-    {
-        icon: faCheck,
-        id: "PermisosTab",
-        target: "PermisosTabContent",
-        name: "Permisos",
-        content: <RolesContent />
     },
 ]

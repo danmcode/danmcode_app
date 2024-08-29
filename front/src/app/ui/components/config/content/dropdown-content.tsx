@@ -39,13 +39,10 @@ export default function DropDownContent() {
         }
     };
 
-    // Definición de los tipos de nombres de listas permitidos
     type ListName = 'Tipos de Identificación' | 'Tipos de Cliente' | 'Tipos de Contacto';
 
-    // Simula una petición a una API
     const fetchItemsForList = async (listName: ListName) => {
-        // Aquí puedes hacer una llamada a una API real o simular una respuesta
-        // Para este ejemplo, vamos a simular la respuesta
+
         const simulatedResponses: Record<ListName, string[]> = {
             "Tipos de Identificación": ["Cédula", "Pasaporte", "Licencia de Conducir"],
             "Tipos de Cliente": ["Corporativo", "Individual", "Mixto"],
@@ -55,7 +52,7 @@ export default function DropDownContent() {
         return new Promise<string[]>(resolve => {
             setTimeout(() => {
                 resolve(simulatedResponses[listName]);
-            }, 1000); // Simula un retraso de 1 segundo
+            }, 1000);
         });
     };
 

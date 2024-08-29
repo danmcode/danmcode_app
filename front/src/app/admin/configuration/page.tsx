@@ -8,7 +8,7 @@ import ConfigMenuContent from '@/app/ui/components/config/menu-content';
 import { ConfigMenuItems } from '@/app/ui/components/config/menu-items';
 
 export default function ConfigurationPage() {
-    // Inicializa el estado con el ID del primer ítem del menú
+
     const [selectedMenuItemId, setSelectedMenuItemId] = useState<string | null>(null);
 
     const breadcrumbs = [
@@ -17,7 +17,6 @@ export default function ConfigurationPage() {
     ];
 
     useEffect(() => {
-        // Establece el primer ítem como seleccionado al cargar el componente
         if (ConfigMenuItems.length > 0) {
             setSelectedMenuItemId(ConfigMenuItems[0].id);
         }
@@ -27,7 +26,6 @@ export default function ConfigurationPage() {
         setSelectedMenuItemId(id);
     };
 
-    // Encuentra el contenido del menú seleccionado
     const selectedMenuItem = ConfigMenuItems.find(item => item.id === selectedMenuItemId);
 
     return (
@@ -58,18 +56,9 @@ export default function ConfigurationPage() {
 
                 <div className="col-sm-8">
                     <div className="tab-content py-3 ps-sm-4 h-100">
-                        {ConfigMenuItems.map((menuItem, index) => {
-
-                                return (
-                                    <ConfigMenuContent
-                                        configMenu={{
-                                            id: menuItem.target,
-                                            index: index,
-                                            children: menuItem.content
-                                        }}
-                                    />
-                                );
-                            })}
+                        {selectedMenuItem && (
+                            <div> {selectedMenuItem.content} </div>
+                        )}
                     </div>
                 </div>
             </div>
