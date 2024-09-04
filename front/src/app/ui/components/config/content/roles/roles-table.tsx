@@ -1,4 +1,6 @@
 import { Rol } from "@/app/lib/domain/entities/rol.entity";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface TableRow {
     [key: string]: any;
@@ -10,7 +12,6 @@ interface TableProps {
 }
 
 export default function RolesTable(props: TableProps) {
-
     const { data, headers } = props;
     const randomIndex = () => Math.floor(Math.random() * (7 - 3 + 1)) + 3;
 
@@ -34,53 +35,56 @@ export default function RolesTable(props: TableProps) {
                     <tbody className="list" id="members-table-body">
                         {data.map((rol) => (
                             <tr>
+                                <td>{rol.role_name}</td>
+                                <td>{rol.description}</td>
                                 <td>
-                                    {rol.role_name}
+                                    <div className={`badge badge-danmcode fs-10 badge-danmcode-${rol.is_active ? "success" : "danger"}`}>
+                                        <span className="fw-bold">
+                                            {(rol.is_active) ? "Activo" : "Inactivo"}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td>
-                                    {rol.description}
-                                </td>
-                                <td>
-                                    {rol.is_active}
-                                </td>
-                                <td>
-                                    {rol.is_active}
+                                    <div className="btn-reveal-trigger position-static">
+                                        <button
+                                            className="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            data-boundary="window"
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                            data-bs-reference="parent"
+                                        >
+                                            <span className="fas fa-ellipsis-h fs-10"></span>
+                                        </button>
+
+                                        <div className="dropdown-menu dropdown-menu-end py-2">
+                                            {Rol.actions().map((action, index) => (
+                                                <a className="dropdown-item" href={action.href}>
+                                                    <FontAwesomeIcon icon={action.icon} />  {action.actionName}
+                                                </a>
+                                            ))}
+
+                                            <div className="dropdown-divider"></div>
+                                            <a className="dropdown-item text-danger" href="#!">
+                                            <FontAwesomeIcon icon={faTrash} />Eliminar
+                                            </a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-            <div className="row align-items-center justify-content-between py-2 pe-0 fs-9">
-                <div className="col-auto d-flex">
-                    <p
-                        className="mb-0 d-none d-sm-block me-3 fw-semibold text-body"
-                        data-list-info="data-list-info"
-                    ></p>
-                    <a className="fw-semibold" href="#!" data-list-view="*">
-                        Ver todo
-                        <span
-                            className="fas fa-angle-right ms-1"
-                            data-fa-transform="down-1"
-                        ></span>
-                    </a>
-                    <a className="fw-semibold d-none" href="#!" data-list-view="less">
-                        Ver menos
-                        <span
-                            className="fas fa-angle-right ms-1"
-                            data-fa-transform="down-1"
-                        ></span>
-                    </a>
-                </div>
-                <div className="col-auto d-flex">
-                    <button className="page-link" data-list-pagination="prev">
-                        <span className="fas fa-chevron-left"></span>
-                    </button>
-                    <ul className="mb-0 pagination"></ul>
-                    <button className="page-link pe-0" data-list-pagination="next">
-                        <span className="fas fa-chevron-right"></span>
-                    </button>
-                </div>
+            <div className="d-flex justify-content-center mt-3">
+                <button className="page-link" data-list-pagination="prev">
+                    <span className="fas fa-chevron-left"></span>
+                </button>
+                <ul className="mb-0 pagination"></ul>
+                <button className="page-link pe-0" data-list-pagination="next">
+                    <span className="fas fa-chevron-right"></span>
+                </button>
             </div>
         </div>
     );
