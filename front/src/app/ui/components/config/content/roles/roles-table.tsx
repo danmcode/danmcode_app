@@ -41,7 +41,11 @@ export default function RolesTable(props: TableProps) {
                                     {rol.description}
                                 </td>
                                 <td>
-                                    {rol.is_active}
+                                    <span 
+                                        className={`badge badge-danmcode badge-danmcode-${ 
+                                            (rol.is_active ) ? 'success' : 'danger'}`}
+                                        > { `${(rol.is_active ) ? 'ACTIVO' : 'INACTIVO'}`} 
+                                    </span>
                                 </td>
                                 <td>
                                     {rol.is_active}
