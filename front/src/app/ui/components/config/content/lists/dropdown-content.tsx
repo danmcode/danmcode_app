@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListItem from "./dropdown-item";
-import BootstrapModal from "../../bootstrap-modal";
-import ListForm from "./lists/list-form";
+import ListForm from "./list-form";
+import BootstrapModal from "../../../bootstrap-modal";
+import { DropDownList } from "@/app/lib/domain/entities/dropdown-list.entity";
+import LoadingLists from "@/app/ui/loading-lists";
 
 export default function DropDownContent() {
     const [showModal, setShowModal] = useState(false);
@@ -12,11 +14,16 @@ export default function DropDownContent() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]); // Estado para los elementos seleccionados
     const [currentList, setCurrentList] = useState<string | null>(null); // Estado para la lista actual seleccionada
 
+    const [dropDowns, setDropDowns] = useState<DropDownList[] | null>(null)
+    const [loading, setLoading] = useState(true);
+
     const handleClose = () => setShowModal(false);
 
-    const handleEdit = (id: number) => {
-        setModalTitle(`Editar nombre de lista: ${id}`);
-        setModalContent(<ListForm />);
+    const handleEdit = (dropDownList: DropDownList) => {
+        setModalTitle(`Editar lista`);
+        setModalContent(
+            <ListForm dropDownList={dropDownList}/>
+        );
         setShowModal(true);
     };
 
@@ -26,41 +33,58 @@ export default function DropDownContent() {
         setShowModal(true);
     };
 
-    const handleDelete = (id: number) => {
+    const handleDelete = (id: string) => {
         console.log(`Delete item with id: ${id}`);
     };
 
-    const handleClick = async (id: number) => {
-        const listItem = items.find(item => item.id === id);
-        if (listItem) {
-            setCurrentList(listItem.text); // Establece la lista actual seleccionada
-            const response = await fetchItemsForList(listItem.text as ListName);
-            setSelectedItems(response);
+    const handleClick = async (id: string) => {
+        // const listItem = items.find(item => item.id === id);
+        // if (listItem) {
+        //     setCurrentList(listItem.text); // Establece la lista actual seleccionada
+        //     const response = await fetchItemsForList(listItem.text as ListName);
+        //     setSelectedItems(response);
+        // }
+    };
+
+    const renderContent = () => {
+        if (loading) {
+            return <LoadingLists />;
         }
-    };
+        
+        if (dropDowns?.length === 0) {
+            return (
+                <li className="list-group-item edit">
+                    No hay listas registradas.
+                </li>
+            );
+        }
+    
+        return dropDowns?.map(item => (
+            <ListItem
+                key={item.id}
+                id={item.id}
+                text={item.list_name}
+                onEdit={() => handleEdit(item)}
+                onClick={() => handleClick(item.id)}
+                onDelete={() => handleDelete(item.id)}
+            />
+        ));
+    }; 
 
-    type ListName = 'Tipos de Identificación' | 'Tipos de Cliente' | 'Tipos de Contacto';
+    useEffect(() => {
+        const fetchDropDown = async() => {
+            try {
+                const dropDown = await DropDownList.getAll();
+                setDropDowns(dropDown);
+            } catch (error) {
+                console.error('Failed to fetch dropDowns', error);
+            }finally {
+                setLoading(false);
+            }
+        }
 
-    const fetchItemsForList = async (listName: ListName) => {
-
-        const simulatedResponses: Record<ListName, string[]> = {
-            "Tipos de Identificación": ["Cédula", "Pasaporte", "Licencia de Conducir"],
-            "Tipos de Cliente": ["Corporativo", "Individual", "Mixto"],
-            "Tipos de Contacto": ["Email", "Teléfono", "Redes Sociales"]
-        };
-
-        return new Promise<string[]>(resolve => {
-            setTimeout(() => {
-                resolve(simulatedResponses[listName]);
-            }, 1000);
-        });
-    };
-
-    const items = [
-        { id: 1, text: 'Tipos de Identificación' },
-        { id: 2, text: 'Tipos de Cliente' },
-        { id: 3, text: 'Tipos de Contacto' },
-    ];
+        fetchDropDown();
+    }, []);
 
     return (
         <div className="row g-3">
@@ -83,16 +107,7 @@ export default function DropDownContent() {
                             </div>
                         </div>
                         <ul className="list-group list-group-flush">
-                            {items.map(item => (
-                                <ListItem
-                                    key={item.id}
-                                    id={item.id}
-                                    text={item.text}
-                                    onEdit={() => handleEdit(item.id)}
-                                    onClick={() => handleClick(item.id)}
-                                    onDelete={() => handleDelete(item.id)}
-                                />
-                            ))}
+                            { renderContent() }
                         </ul>
                     </div>
                 </div>
@@ -102,9 +117,7 @@ export default function DropDownContent() {
                     <div className="card-body">
                         <h5 className="card-title">{currentList || "Elementos"}</h5>
                         <ul className="list-group list-group-flush">
-                            {selectedItems.map((item, index) => (
-                                <li key={index} className="list-group-item">{item}</li>
-                            ))}
+                            <LoadingLists />
                         </ul>
                     </div>
                 </div>

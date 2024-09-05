@@ -1,6 +1,6 @@
 import { faBuilding, faCheck, faListDots, faUsers, faUserShield } from "@fortawesome/free-solid-svg-icons";
-import DropDownContent from "./content/dropdown-content";
 import RolesContent from "./content/roles/roles-content";
+import DropDownContent from "./content/lists/dropdown-content";
 
 export const ConfigMenuItems = [
     {

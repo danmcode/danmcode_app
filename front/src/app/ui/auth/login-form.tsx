@@ -34,6 +34,7 @@ export default function LoginForm() {
       }, 2000);
 
     })}>
+      
       <div className="text-center mb-7">
         <a
           className="d-flex flex-center text-decoration-none mb-4"

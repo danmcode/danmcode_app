@@ -36356,3 +36356,8 @@ a[href].bg-body-secondary:hover, a[href].bg-body-secondary:focus {
   padding: 10px;
   cursor: pointer;
 }
+
+.list-group-item:hover {
+  background-color: var(--danmcode-gray-100);
+  border-radius: 10px;
+}
