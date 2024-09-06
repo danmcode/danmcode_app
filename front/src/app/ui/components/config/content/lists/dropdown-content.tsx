@@ -14,7 +14,7 @@ export default function DropDownContent() {
     const [modalTitle, setModalTitle] = useState<string>("");
     const [modalContent, setModalContent] = useState<React.ReactNode>(null);
     const [selectedItems, setSelectedItems] = useState<DropDownListItem[]>([]);
-    const [currentList, setCurrentList] = useState<string | null>(null);
+    const [currentList, setCurrentList] = useState<DropDownList | null>(null);
 
     const [dropDowns, setDropDowns] = useState<DropDownList[] | null>(null)
     const [loading, setLoading] = useState(true);
@@ -35,14 +35,6 @@ export default function DropDownContent() {
         setShowModal(true);
     };
 
-
-    const handleListItem = () => {
-        setModalTitle("Insertar elemento de lista:");
-        setModalContent(<ListItemForm />);
-        setShowModal(true);
-    };
-
-
     const handleDelete = (id: string) => {
         console.log(`Delete item with id: ${id}`);
     };
@@ -52,14 +44,14 @@ export default function DropDownContent() {
         if (listItem) {
             const response = listItem['dropdown_list_items'];
             const items = response?.map((itemData: any) => new DropDownListItem(itemData));
-            setCurrentList(listItem.list_name);
+            setCurrentList(listItem);
             setSelectedItems(items ?? []);
         }
     };
 
     const handleAddItem = () => {
-        setModalTitle("Crear una nueva lista");
-        setModalContent(<ListForm />);
+        setModalTitle(`Agrear ${currentList?.list_name}`);
+        setModalContent(<ListItemForm />);
         setShowModal(true);
     };
  
@@ -72,8 +64,6 @@ export default function DropDownContent() {
     const handleDeleteItem = (id: string) => {
         console.log(`Delete item with id: ${id}`);
     };
-
-
 
     const renderDropDownContent = () => {
         if (loading) {
@@ -175,12 +165,12 @@ export default function DropDownContent() {
                         <div className="card-title">
                             <div className="row">
                                 <div className="col-10 align-self-center">
-                                    <h5 className="card-title">{currentList || "Elementos"}</h5>
+                                    <h5 className="card-title">{currentList?.list_name || "Elementos"}</h5>
                                 </div>
                                 <div className="d-flex justify-content-end col-2">
                                     <button
                                         className="btn btn-sm btn-primary"
-                                        onClick={handleListItem}
+                                        onClick={handleAddItem}
                                     >
                                         <i className="fas fa-plus"></i>
                                     </button>

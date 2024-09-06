@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import FormIconInput from "../../../form-icon-input";
 import { faListDots } from "@fortawesome/free-solid-svg-icons";
 import { z } from "zod";
@@ -44,10 +44,10 @@ const ListItemForm: React.FC<ListFormProps> = ({ dropDownList = null, dropDownLi
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row className="align-items-center">
-        <Col sm="8" className="my-1">
+        <Col sm="6" className="my-1">
           <FormIconInput
-            label={"Nombre del elemento de la lista *"}
-            placeHolder={"Nombre del elemento de la lista *"}
+            label={"Nombre *"}
+            placeHolder={"Nombre *"}
             icon={faListDots}
             type="text"
             id="list_name"
@@ -60,7 +60,7 @@ const ListItemForm: React.FC<ListFormProps> = ({ dropDownList = null, dropDownLi
           )}
         </Col>
 
-        <Col sm="8" className="my-1">
+        <Col sm="6" className="my-1">
           <FormIconInput
             label={"Descripción *"}
             placeHolder={"Descripción *"}
@@ -76,11 +76,12 @@ const ListItemForm: React.FC<ListFormProps> = ({ dropDownList = null, dropDownLi
           )}
         </Col>
 
-        <Col xs="4" className="my-1">
+        <Modal.Footer className="mt-4">
           <Button type="submit" disabled={isSearch}>
             {isEdit ? "Actualizar" : "Guardar"}
           </Button>
-        </Col>
+        </Modal.Footer>
+
       </Row>
     </Form>
   );

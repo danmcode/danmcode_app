@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import FormIconInput from "../../../form-icon-input";
 import { faListDots } from "@fortawesome/free-solid-svg-icons";
 import { z } from "zod";
@@ -13,7 +13,6 @@ const dropDownListSchema = z.object({
   list_name: z.string().min(1, "El nombre de la lista es obligatorio"),
 });
 
-// Interfaz para los datos del formulario
 type DropDownListFormData = z.infer<typeof dropDownListSchema>;
 
 interface DropDownList {
@@ -48,14 +47,13 @@ const ListForm: React.FC<ListFormProps> = ({ dropDownList = null, isEdit = false
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row className="align-items-center">
-        <Col sm="8" className="my-1">
+        <Col className="my-1 mb-2">
           <FormIconInput
             label={"Nombre de la Lista *"}
             placeHolder={"Nombre de la Lista *"}
             icon={faListDots}
             type="text"
             id="list_name"
-            // Se elimina el value porque React Hook Form maneja el control
             register={register("list_name")}
           />
           {errors.list_name && (
@@ -65,11 +63,12 @@ const ListForm: React.FC<ListFormProps> = ({ dropDownList = null, isEdit = false
           )}
         </Col>
 
-        <Col xs="4" className="my-1">
+        <Modal.Footer>
           <Button type="submit" disabled={isSearch}>
             {isEdit ? "Actualizar" : "Guardar"}
           </Button>
-        </Col>
+        </Modal.Footer>
+
       </Row>
     </Form>
   );

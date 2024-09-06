@@ -17,11 +17,6 @@ const BootstrapModal: React.FC<BootstrapModalProps> = ({ title, content, onClose
             <Modal.Body>
                 {content}
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onClose}>
-                    Cerrar
-                </Button>
-            </Modal.Footer>
         </Modal>
     );
 };
