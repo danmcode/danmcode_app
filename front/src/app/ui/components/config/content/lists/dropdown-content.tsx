@@ -6,13 +6,15 @@ import ListForm from "./list-form";
 import BootstrapModal from "../../../bootstrap-modal";
 import { DropDownList } from "@/app/lib/domain/entities/dropdown-list.entity";
 import LoadingLists from "@/app/ui/loading-lists";
+import { DropDownListItem } from "@/app/lib/domain/entities/dropdown-list-item.entity";
+import ListItemForm from "./list-item-form";
 
 export default function DropDownContent() {
     const [showModal, setShowModal] = useState(false);
     const [modalTitle, setModalTitle] = useState<string>("");
     const [modalContent, setModalContent] = useState<React.ReactNode>(null);
-    const [selectedItems, setSelectedItems] = useState<string[]>([]); // Estado para los elementos seleccionados
-    const [currentList, setCurrentList] = useState<string | null>(null); // Estado para la lista actual seleccionada
+    const [selectedItems, setSelectedItems] = useState<DropDownListItem[]>([]);
+    const [currentList, setCurrentList] = useState<string | null>(null);
 
     const [dropDowns, setDropDowns] = useState<DropDownList[] | null>(null)
     const [loading, setLoading] = useState(true);
@@ -22,7 +24,7 @@ export default function DropDownContent() {
     const handleEdit = (dropDownList: DropDownList) => {
         setModalTitle(`Editar lista`);
         setModalContent(
-            <ListForm dropDownList={dropDownList}/>
+            <ListForm dropDownList={dropDownList} />
         );
         setShowModal(true);
     };
@@ -33,24 +35,51 @@ export default function DropDownContent() {
         setShowModal(true);
     };
 
+
+    const handleListItem = () => {
+        setModalTitle("Insertar elemento de lista:");
+        setModalContent(<ListItemForm />);
+        setShowModal(true);
+    };
+
+
     const handleDelete = (id: string) => {
         console.log(`Delete item with id: ${id}`);
     };
 
     const handleClick = async (id: string) => {
-        // const listItem = items.find(item => item.id === id);
-        // if (listItem) {
-        //     setCurrentList(listItem.text); // Establece la lista actual seleccionada
-        //     const response = await fetchItemsForList(listItem.text as ListName);
-        //     setSelectedItems(response);
-        // }
+        const listItem = dropDowns!.find(item => item.id === id);
+        if (listItem) {
+            const response = listItem['dropdown_list_items'];
+            const items = response?.map((itemData: any) => new DropDownListItem(itemData));
+            setCurrentList(listItem.list_name);
+            setSelectedItems(items ?? []);
+        }
     };
 
-    const renderContent = () => {
+    const handleAddItem = () => {
+        setModalTitle("Crear una nueva lista");
+        setModalContent(<ListForm />);
+        setShowModal(true);
+    };
+ 
+    const handleEditItem = (dropDownListItem: DropDownListItem) => {
+        setModalTitle(`Editar item de lista`);
+        setModalContent( <ListItemForm dropDownListItem={dropDownListItem} /> );
+        setShowModal(true);    
+    };
+
+    const handleDeleteItem = (id: string) => {
+        console.log(`Delete item with id: ${id}`);
+    };
+
+
+
+    const renderDropDownContent = () => {
         if (loading) {
             return <LoadingLists />;
         }
-        
+
         if (dropDowns?.length === 0) {
             return (
                 <li className="list-group-item edit">
@@ -58,7 +87,7 @@ export default function DropDownContent() {
                 </li>
             );
         }
-    
+
         return dropDowns?.map(item => (
             <ListItem
                 key={item.id}
@@ -69,16 +98,42 @@ export default function DropDownContent() {
                 onDelete={() => handleDelete(item.id)}
             />
         ));
-    }; 
+    };
+
+    const renderDropDownItemContent = () => {
+        if (loading) {
+            return <LoadingLists />;
+        }
+
+        if (selectedItems.length === 0) {
+            return (
+                <li className="list-group-item edit">
+                    No hay listas registradas.
+                </li>
+            );
+        }
+
+        return selectedItems?.map(item => (
+            <ListItem
+                key={item.id}
+                id={item.id}
+                text={item.list_item_name}
+                onEdit={() => handleEditItem(item)}
+                onClick={() => ''}
+                onDelete={() => handleDelete(item.id)}
+            />
+        ));
+    }
 
     useEffect(() => {
-        const fetchDropDown = async() => {
+        const fetchDropDown = async () => {
             try {
                 const dropDown = await DropDownList.getAll();
+                console.log(dropDown);
                 setDropDowns(dropDown);
             } catch (error) {
                 console.error('Failed to fetch dropDowns', error);
-            }finally {
+            } finally {
                 setLoading(false);
             }
         }
@@ -107,17 +162,34 @@ export default function DropDownContent() {
                             </div>
                         </div>
                         <ul className="list-group list-group-flush">
-                            { renderContent() }
+                            {renderDropDownContent()}
                         </ul>
                     </div>
                 </div>
             </div>
+
             <div className="col-12 col-lg-6">
                 <div className="card">
                     <div className="card-body">
-                        <h5 className="card-title">{currentList || "Elementos"}</h5>
+
+                        <div className="card-title">
+                            <div className="row">
+                                <div className="col-10 align-self-center">
+                                    <h5 className="card-title">{currentList || "Elementos"}</h5>
+                                </div>
+                                <div className="d-flex justify-content-end col-2">
+                                    <button
+                                        className="btn btn-sm btn-primary"
+                                        onClick={handleListItem}
+                                    >
+                                        <i className="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <ul className="list-group list-group-flush">
-                            <LoadingLists />
+                            {renderDropDownItemContent()}
                         </ul>
                     </div>
                 </div>
