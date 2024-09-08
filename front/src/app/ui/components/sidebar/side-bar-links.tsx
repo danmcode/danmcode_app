@@ -3,7 +3,7 @@ import { faAddressBook, faArchive, faBook, faBuilding, faCar, faMessage, faTasks
 export const SideBarLinks = [
     {
         groupMenu: {
-            groupName: "Administración",
+            groupName: "Control de accesos",
             keyValue: "group-admin",
             menus: [
                 {
@@ -73,20 +73,5 @@ export const SideBarLinks = [
                 },
             ],
         },
-    },
-    {
-        groupMenu: {
-          groupName: "Configuración",
-          keyValue: "group-config",
-          menus: [
-            {
-              menuIcon: faAddressBook,
-              menuName: "Configuración general",
-              menuHref: "nv-config",
-              keyValue: "nv-config",
-              subMenus: [{ name: "Configuración de clientes", href: "#", keyValue:"show-config" }],
-            },
-          ],
-        },
-      },
+    }
 ];

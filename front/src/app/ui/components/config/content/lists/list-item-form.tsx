@@ -7,9 +7,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
+import { DropDownListItem } from '../../../../../lib/domain/entities/dropdown-list-item.entity';
 import { DropDownList } from "@/app/lib/domain/entities/dropdown-list.entity";
 
-// Esquema de validación con Zod
 const dropDownListSchema = z.object({
   list_name: z.string().min(1, "El nombre de la lista es obligatorio"),
 });
@@ -18,17 +18,12 @@ type DropDownListFormData = z.infer<typeof dropDownListSchema>;
 
 interface ListFormProps {
   dropDownList?: DropDownList;
+  dropDownListItem?: DropDownListItem;
   isEdit?: boolean;
   isSearch?: boolean;
-  onSuccess: () => void;
 }
 
-const ListForm: React.FC<ListFormProps> = ({ 
-  dropDownList = null, 
-  isEdit = false, 
-  isSearch = false,
-  onSuccess,
-}) => {
+const ListItemForm: React.FC<ListFormProps> = ({ dropDownList = null, dropDownListItem = null ,isEdit = false, isSearch = false }) => {
   const initialName = dropDownList ? dropDownList.list_name : '';
 
   const {
@@ -43,17 +38,16 @@ const ListForm: React.FC<ListFormProps> = ({
   });
 
   const onSubmit = (data: DropDownListFormData) => {
-    DropDownList.create(data);
-    onSuccess();
+    console.log("Form data:", data);
   };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row className="align-items-center">
-        <Col className="my-1 mb-2">
+        <Col sm="6" className="my-1">
           <FormIconInput
-            label={"Nombre de la Lista *"}
-            placeHolder={"Nombre de la Lista *"}
+            label={"Nombre *"}
+            placeHolder={"Nombre *"}
             icon={faListDots}
             type="text"
             id="list_name"
@@ -66,7 +60,23 @@ const ListForm: React.FC<ListFormProps> = ({
           )}
         </Col>
 
-        <Modal.Footer>
+        <Col sm="6" className="my-1">
+          <FormIconInput
+            label={"Descripción *"}
+            placeHolder={"Descripción *"}
+            icon={faListDots}
+            type="text"
+            id="list_name"
+            register={register("list_name")}
+          />
+          {errors.list_name && (
+            <span className="text-danger">
+              {errors.list_name.message}
+            </span>
+          )}
+        </Col>
+
+        <Modal.Footer className="mt-4">
           <Button type="submit" disabled={isSearch}>
             {isEdit ? "Actualizar" : "Guardar"}
           </Button>
@@ -77,4 +87,4 @@ const ListForm: React.FC<ListFormProps> = ({
   );
 };
 
-export default ListForm;
+export default ListItemForm;

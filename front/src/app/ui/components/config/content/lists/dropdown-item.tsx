@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 interface ListItemProps {
-    id: number;
+    id: string;
     text: string;
-    onEdit: (id: number) => void;
-    onDelete: (id: number) => void;
-    onClick: (id: number) => void;
+    onEdit: (id: string) => void;
+    onDelete: (id: string) => void;
+    onClick: (id: string) => void;
 }
 
 export default function ListItem({ id, text, onEdit, onDelete, onClick }: ListItemProps) {

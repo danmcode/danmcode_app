@@ -39,25 +39,15 @@ export class Rol {
 
 
     static headers() {
-        return ['ROL', 'DESCRIPCIÓN', 'ACTIVO', 'ACCIONES'];
+        return ['ROL', 'DESCRIPCIÓN', 'ESTADO', 'ACCIONES'];
     }
 
     static actions() {
         return [{
-            actionName: "Ver",
-            icon: faEye,
-            href: "#!",
-        },
-        {
             actionName: "Editar",
             icon: faPencil,
             href: "#!",
-        },
-        {
-            actionName: "Eliminar",
-            icon: faTrash,
-            href: "#!",
-        }];
+        }]
     }
 }
 
