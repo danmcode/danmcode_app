@@ -36361,3 +36361,32 @@ a[href].bg-body-secondary:hover, a[href].bg-body-secondary:focus {
   background-color: var(--danmcode-gray-100);
   border-radius: 10px;
 }
+
+.dropdown-lists-custom {
+  height: 300px;
+  overflow-y: scroll;   
+  overflow-x: hidden;
+}
+
+.dropdown-lists-custom::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-lists-custom::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0;
+  border-radius: 20px;
+}
+
+.dropdown-lists-custom::-webkit-scrollbar-thumb:hover {
+  background-color: #8c8c8c;
+}
+
+.dropdown-lists-custom::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+  border-radius: 20px;
+}
+
+.dropdown-lists-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #b0b0b0 #e0e0e0;
+}

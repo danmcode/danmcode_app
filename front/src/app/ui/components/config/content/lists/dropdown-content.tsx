@@ -24,14 +24,17 @@ export default function DropDownContent() {
     const handleEdit = (dropDownList: DropDownList) => {
         setModalTitle(`Editar lista`);
         setModalContent(
-            <ListForm dropDownList={dropDownList} />
+            <ListForm
+                dropDownList={dropDownList}
+                onSuccess={handleSuccess}
+            />
         );
         setShowModal(true);
     };
 
     const handleAdd = () => {
         setModalTitle("Crear una nueva lista");
-        setModalContent(<ListForm />);
+        setModalContent(<ListForm onSuccess={handleSuccess} />);
         setShowModal(true);
     };
 
@@ -54,11 +57,11 @@ export default function DropDownContent() {
         setModalContent(<ListItemForm />);
         setShowModal(true);
     };
- 
+
     const handleEditItem = (dropDownListItem: DropDownListItem) => {
         setModalTitle(`Editar item de lista`);
-        setModalContent( <ListItemForm dropDownListItem={dropDownListItem} /> );
-        setShowModal(true);    
+        setModalContent(<ListItemForm dropDownListItem={dropDownListItem} />);
+        setShowModal(true);
     };
 
     const handleDeleteItem = (id: string) => {
@@ -115,21 +118,26 @@ export default function DropDownContent() {
         ));
     }
 
-    useEffect(() => {
-        const fetchDropDown = async () => {
-            try {
-                const dropDown = await DropDownList.getAll();
-                console.log(dropDown);
-                setDropDowns(dropDown);
-            } catch (error) {
-                console.error('Failed to fetch dropDowns', error);
-            } finally {
-                setLoading(false);
-            }
+    const fetchDropDown = async () => {
+        try {
+            setLoading(true);
+            const dropDowns = await DropDownList.getAll();
+            setDropDowns([...dropDowns]);
+        } catch (error) {
+            console.error('Failed to fetch dropDowns', error);
+        } finally {
+            setLoading(false);
         }
+    }
 
+    useEffect(() => {
         fetchDropDown();
     }, []);
+
+    const handleSuccess = () => {
+        fetchDropDown();        
+        setShowModal(false);
+    };
 
     return (
         <div className="row g-3">
@@ -151,7 +159,7 @@ export default function DropDownContent() {
                                 </div>
                             </div>
                         </div>
-                        <ul className="list-group list-group-flush">
+                        <ul className="list-group list-group-flush dropdown-lists-custom">
                             {renderDropDownContent()}
                         </ul>
                     </div>
@@ -178,7 +186,7 @@ export default function DropDownContent() {
                             </div>
                         </div>
 
-                        <ul className="list-group list-group-flush">
+                        <ul className="list-group list-group-flush dropdown-lists-custom">
                             {renderDropDownItemContent()}
                         </ul>
                     </div>

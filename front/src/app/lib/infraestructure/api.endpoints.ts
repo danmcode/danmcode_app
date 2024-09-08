@@ -18,8 +18,14 @@ export const fetchResource = async (resource: string, id?: string) => {
 };
 
 export const createResource = async (resource: string, data: any) => {
-  const response = await apiClient.post(`/${resource}`, data);
-  return response.data;
+  try {
+
+    const response = await apiClient.post(`/${resource}`, data);
+    return response.data;
+  
+  } catch (error) {
+    handleApiError(error);
+  }
 };
 
 export const updateResource = async (resource: string, id: string, data: any) => {

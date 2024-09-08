@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
+import { DropDownList } from "@/app/lib/domain/entities/dropdown-list.entity";
 
 // Esquema de validación con Zod
 const dropDownListSchema = z.object({
@@ -15,18 +16,19 @@ const dropDownListSchema = z.object({
 
 type DropDownListFormData = z.infer<typeof dropDownListSchema>;
 
-interface DropDownList {
-  id: string;
-  list_name: string;
-}
-
 interface ListFormProps {
   dropDownList?: DropDownList;
   isEdit?: boolean;
   isSearch?: boolean;
+  onSuccess: () => void;
 }
 
-const ListForm: React.FC<ListFormProps> = ({ dropDownList = null, isEdit = false, isSearch = false }) => {
+const ListForm: React.FC<ListFormProps> = ({ 
+  dropDownList = null, 
+  isEdit = false, 
+  isSearch = false,
+  onSuccess,
+}) => {
   const initialName = dropDownList ? dropDownList.list_name : '';
 
   const {
@@ -41,7 +43,8 @@ const ListForm: React.FC<ListFormProps> = ({ dropDownList = null, isEdit = false
   });
 
   const onSubmit = (data: DropDownListFormData) => {
-    console.log("Form data:", data);
+    DropDownList.create(data);
+    onSuccess();
   };
 
   return (
