@@ -37,7 +37,6 @@ const ListForm: React.FC<ListFormProps> = ({
     resolver: zodResolver(dropDownListSchema),
     defaultValues: { 
       list_name: initialName,
-
     },
   });
 

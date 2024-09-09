@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { fetchResource } from '../../infraestructure/api.endpoints';
+import { getResource, postResource } from '../../infraestructure/api.endpoints';
 
 interface DropDownListItemData {
     id: UUID;
@@ -27,8 +27,17 @@ export class DropDownListItem {
     }
 
     static async getAll() {
-        const data = await fetchResource('dropdown-lists');
+        const data = await getResource('dropdown-lists');
         return data['DropDownListItems'].map((item: DropDownListItemData) => new DropDownListItem(item));
+    }
+
+    static async create(data: any) {
+        try {
+            const response = await postResource('dropdown-lists-item', data);
+            return response;
+          } catch (error: any) {
+            throw error;
+          }
     }
 
 }

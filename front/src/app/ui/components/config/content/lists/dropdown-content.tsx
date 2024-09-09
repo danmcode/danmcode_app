@@ -39,14 +39,14 @@ export default function DropDownContent() {
 
     const handleAdd = () => {
         setModalTitle("Crear una nueva lista");
-        setModalContent(<ListForm 
+        setModalContent(<ListForm
             onSuccess={handleSuccess}
             onCancel={handleClose}
         />);
         <CustomToast
-        message='Error'
-        onClose={() => 'Hi!'}
-      />
+            message='Error'
+            onClose={() => 'Hi!'}
+        />
         setShowModal(true);
     };
 
@@ -54,8 +54,8 @@ export default function DropDownContent() {
         setModalTitle("Eliminar lista");
         setModalContent(<DeleteList
             dropDownList={dropDownList}
-            onSuccess={handleSuccess} 
-            onCancel={handleClose}/>
+            onSuccess={handleSuccess}
+            onCancel={handleClose} />
         );
         setShowModal(true);
     };
@@ -71,14 +71,26 @@ export default function DropDownContent() {
     };
 
     const handleAddItem = () => {
-        setModalTitle(`Agrear ${currentList?.list_name}`);
-        setModalContent(<ListItemForm />);
+        setModalTitle(`Agregar ${currentList?.list_name}`);
+        setModalContent(
+            <ListItemForm
+                dropDownList={currentList!}
+                onSuccess={handleSuccess}
+                onCancel={handleClose}
+            />
+        );
         setShowModal(true);
     };
 
     const handleEditItem = (dropDownListItem: DropDownListItem) => {
         setModalTitle(`Editar item de lista`);
-        setModalContent(<ListItemForm dropDownListItem={dropDownListItem} />);
+        setModalContent(<ListItemForm
+            dropDownListItem={dropDownListItem}
+            dropDownList={currentList!}
+            onSuccess={handleSuccess}
+            onCancel={handleClose}
+            isEdit={true}
+        />);
         setShowModal(true);
     };
 
