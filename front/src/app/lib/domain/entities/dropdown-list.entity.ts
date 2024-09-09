@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { fetchResource, createResource } from '../../infraestructure/api.endpoints';
+import { fetchResource, createResource, deleteResource } from '../../infraestructure/api.endpoints';
 import { DropDownListItem } from './dropdown-list-item.entity';
 
 interface DropDownListData {
@@ -36,5 +36,10 @@ export class DropDownList {
     static async create(data: any) {
         const response = await createResource('dropdown-lists', data);
         console.log(response);
+    }
+
+    static async delete(data: any) {
+        const response = await deleteResource('dropdown-lists/delete', data);
+        return response;
     }
 }

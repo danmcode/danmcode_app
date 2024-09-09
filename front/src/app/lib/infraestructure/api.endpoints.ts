@@ -22,7 +22,7 @@ export const createResource = async (resource: string, data: any) => {
 
     const response = await apiClient.post(`/${resource}`, data);
     return response.data;
-  
+
   } catch (error) {
     handleApiError(error);
   }
@@ -33,7 +33,12 @@ export const updateResource = async (resource: string, id: string, data: any) =>
   return response.data;
 };
 
-export const deleteResource = async (resource: string, id: string) => {
-  const response = await apiClient.delete(`/${resource}/${id}`);
-  return response.data;
+export const deleteResource = async (resource: string, data: any) => {
+  try {
+    const response = await apiClient.post(`/${resource}`, data);
+    return response.data;
+
+  } catch (error) {
+    handleApiError(error);
+  }
 };

@@ -42,9 +42,10 @@ const ListForm: React.FC<ListFormProps> = ({
     },
   });
 
-  const onSubmit = (data: DropDownListFormData) => {
-    DropDownList.create(data);
-    onSuccess();
+  const onSubmit = async (data: DropDownListFormData) => {
+    const created = await DropDownList.create(data);
+    console.log(created);
+    return onSuccess();
   };
 
   return (

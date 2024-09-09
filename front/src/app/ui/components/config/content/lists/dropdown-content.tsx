@@ -8,6 +8,7 @@ import { DropDownList } from "@/app/lib/domain/entities/dropdown-list.entity";
 import LoadingLists from "@/app/ui/loading-lists";
 import { DropDownListItem } from "@/app/lib/domain/entities/dropdown-list-item.entity";
 import ListItemForm from "./list-item-form";
+import DeleteList from "./delete-list";
 
 export default function DropDownContent() {
     const [showModal, setShowModal] = useState(false);
@@ -38,8 +39,14 @@ export default function DropDownContent() {
         setShowModal(true);
     };
 
-    const handleDelete = (id: string) => {
-        console.log(`Delete item with id: ${id}`);
+    const handleDelete = (dropDownList: DropDownList) => {
+        setModalTitle("Eliminar lista");
+        setModalContent(<DeleteList
+            dropDownList={dropDownList}
+            onSuccess={handleSuccess} 
+            onCancel={handleClose}/>
+        );
+        setShowModal(true);
     };
 
     const handleClick = async (id: string) => {
@@ -88,7 +95,7 @@ export default function DropDownContent() {
                 text={item.list_name}
                 onEdit={() => handleEdit(item)}
                 onClick={() => handleClick(item.id)}
-                onDelete={() => handleDelete(item.id)}
+                onDelete={() => handleDelete(item)}
             />
         ));
     };
@@ -113,7 +120,7 @@ export default function DropDownContent() {
                 text={item.list_item_name}
                 onEdit={() => handleEditItem(item)}
                 onClick={() => ''}
-                onDelete={() => handleDelete(item.id)}
+                onDelete={() => handleDeleteItem(item.id)}
             />
         ));
     }
@@ -122,6 +129,7 @@ export default function DropDownContent() {
         try {
             setLoading(true);
             const dropDowns = await DropDownList.getAll();
+            console.log(dropDowns);
             setDropDowns([...dropDowns]);
         } catch (error) {
             console.error('Failed to fetch dropDowns', error);
@@ -135,7 +143,7 @@ export default function DropDownContent() {
     }, []);
 
     const handleSuccess = () => {
-        fetchDropDown();        
+        fetchDropDown();
         setShowModal(false);
     };
 
