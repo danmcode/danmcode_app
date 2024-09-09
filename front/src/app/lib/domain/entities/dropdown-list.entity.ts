@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { fetchResource, createResource, deleteResource } from '../../infraestructure/api.endpoints';
+import { getResource, postResource } from '../../infraestructure/api.endpoints';
 import { DropDownListItem } from './dropdown-list-item.entity';
 
 interface DropDownListData {
@@ -29,13 +29,31 @@ export class DropDownList {
     }
 
     static async getAll() {
-        const data = await fetchResource('dropdown-lists');
+        const data = await getResource('dropdown-lists');
         return data['dropdownLists'].map((item: DropDownListData) => new DropDownList(item));
     }
 
     static async create(data: any) {
         try {
-            const response = await createResource('dropdown-lists', data);
+            const response = await postResource('dropdown-lists', data);
+            return response;
+          } catch (error: any) {
+            throw error;
+          }
+    }
+
+    static async edit(data: any) {
+        try {
+            const response = await postResource('dropdown-lists/update', data);
+            return response;
+          } catch (error: any) {
+            throw error;
+          }
+    }
+
+    static async search(data: any) {
+        try {
+            const response = await postResource('dropdown-lists/search', data);
             return response;
           } catch (error: any) {
             throw error;
@@ -43,7 +61,7 @@ export class DropDownList {
     }
 
     static async delete(data: any) {
-        const response = await deleteResource('dropdown-lists/delete', data);
+        const response = await postResource('dropdown-lists/delete', data);
         return response;
     }
 }

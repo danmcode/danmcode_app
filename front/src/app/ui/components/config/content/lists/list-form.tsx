@@ -21,24 +21,50 @@ interface ListFormProps {
   isEdit?: boolean;
   isSearch?: boolean;
   onSuccess: () => void;
+  onCancel: () => void;
 }
-const ListForm: React.FC<ListFormProps> = ({ dropDownList = null, isEdit = false, isSearch = false, onSuccess }) => {
+const ListForm: React.FC<ListFormProps> = ({
+  dropDownList = null,
+  isEdit = false,
+  isSearch = false,
+  onSuccess,
+  onCancel
+}) => {
   const initialName = dropDownList ? dropDownList.list_name : '';
 
   const { register, handleSubmit, setError, formState: { errors } } = useForm<DropDownListFormData>({
     resolver: zodResolver(dropDownListSchema),
-    defaultValues: { list_name: initialName },
+    defaultValues: { 
+      list_name: initialName,
+      ...(isEdit && { list_name_id: dropDownList?.id })
+    },
   });
 
   const onSubmit = async (data: DropDownListFormData) => {
     try {
+      
+      if(isEdit){
+        console.log(dropDownList?.id);
+        await DropDownList.edit(data);
+        onSuccess();
+      }
+
+      if(isSearch) {
+
+        await DropDownList.search(data);
+        onSuccess();
+      }
+
       await DropDownList.create(data);
       onSuccess();
+
     } catch (error: any) {
       if (error.errors) {
         error.errors.forEach((err: any) => {
           setError(err.path, { type: "server", message: err.msg });
         });
+      }else{
+        console.log('error**:', error)
       }
     }
   };
@@ -63,6 +89,9 @@ const ListForm: React.FC<ListFormProps> = ({ dropDownList = null, isEdit = false
         </Col>
 
         <Modal.Footer>
+          <Button className="btn-secondary" onClick={onCancel}>
+            {"Cancelar"}
+          </Button>
           <Button type="submit" disabled={isSearch}>
             {isEdit ? "Actualizar" : "Guardar"}
           </Button>

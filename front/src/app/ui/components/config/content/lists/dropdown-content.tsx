@@ -9,6 +9,8 @@ import LoadingLists from "@/app/ui/loading-lists";
 import { DropDownListItem } from "@/app/lib/domain/entities/dropdown-list-item.entity";
 import ListItemForm from "./list-item-form";
 import DeleteList from "./delete-list";
+import { Habibi } from "next/font/google";
+import CustomToast from "../../../custom-toast";
 
 export default function DropDownContent() {
     const [showModal, setShowModal] = useState(false);
@@ -28,6 +30,8 @@ export default function DropDownContent() {
             <ListForm
                 dropDownList={dropDownList}
                 onSuccess={handleSuccess}
+                onCancel={handleClose}
+                isEdit={true}
             />
         );
         setShowModal(true);
@@ -35,7 +39,14 @@ export default function DropDownContent() {
 
     const handleAdd = () => {
         setModalTitle("Crear una nueva lista");
-        setModalContent(<ListForm onSuccess={handleSuccess} />);
+        setModalContent(<ListForm 
+            onSuccess={handleSuccess}
+            onCancel={handleClose}
+        />);
+        <CustomToast
+        message='Error'
+        onClose={() => 'Hi!'}
+      />
         setShowModal(true);
     };
 
@@ -129,7 +140,6 @@ export default function DropDownContent() {
         try {
             setLoading(true);
             const dropDowns = await DropDownList.getAll();
-            console.log(dropDowns);
             setDropDowns([...dropDowns]);
         } catch (error) {
             console.error('Failed to fetch dropDowns', error);
