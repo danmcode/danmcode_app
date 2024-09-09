@@ -22,30 +22,25 @@ interface ListFormProps {
   isSearch?: boolean;
   onSuccess: () => void;
 }
-
-const ListForm: React.FC<ListFormProps> = ({ 
-  dropDownList = null, 
-  isEdit = false, 
-  isSearch = false,
-  onSuccess,
-}) => {
+const ListForm: React.FC<ListFormProps> = ({ dropDownList = null, isEdit = false, isSearch = false, onSuccess }) => {
   const initialName = dropDownList ? dropDownList.list_name : '';
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<DropDownListFormData>({
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<DropDownListFormData>({
     resolver: zodResolver(dropDownListSchema),
-    defaultValues: {
-      list_name: initialName,
-    },
+    defaultValues: { list_name: initialName },
   });
 
   const onSubmit = async (data: DropDownListFormData) => {
-    const created = await DropDownList.create(data);
-    console.log(created);
-    return onSuccess();
+    try {
+      await DropDownList.create(data);
+      onSuccess();
+    } catch (error: any) {
+      if (error.errors) {
+        error.errors.forEach((err: any) => {
+          setError(err.path, { type: "server", message: err.msg });
+        });
+      }
+    }
   };
 
   return (
@@ -72,10 +67,10 @@ const ListForm: React.FC<ListFormProps> = ({
             {isEdit ? "Actualizar" : "Guardar"}
           </Button>
         </Modal.Footer>
-
       </Row>
     </Form>
   );
 };
+
 
 export default ListForm;

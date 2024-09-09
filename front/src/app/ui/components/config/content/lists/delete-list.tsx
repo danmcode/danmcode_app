@@ -24,7 +24,6 @@ const DeleteList: React.FC<DeleteListProps> = ({
     const handleDelete = async () => {
         const data = { 'list_name_id': dropDownList?.id }
         const deleted = await DropDownList.delete(data);
-        console.log('deleted: ', deleted);
         return onSuccess();
     }
 

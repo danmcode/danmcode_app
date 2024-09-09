@@ -34,8 +34,12 @@ export class DropDownList {
     }
 
     static async create(data: any) {
-        const response = await createResource('dropdown-lists', data);
-        console.log(response);
+        try {
+            const response = await createResource('dropdown-lists', data);
+            return response;
+          } catch (error: any) {
+            throw error;
+          }
     }
 
     static async delete(data: any) {
