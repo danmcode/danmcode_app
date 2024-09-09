@@ -17,7 +17,7 @@ export const getResource = async (resource: string, id?: string) => {
   }
 };
 
-export const postResource = async (resource: string, data: any) => {
+export const postResource = async (resource: string, data: any = {}) => {
 
   try {
     const response = await apiClient.post(`/${resource}`, data);
@@ -28,7 +28,7 @@ export const postResource = async (resource: string, data: any) => {
     if (error.response && error.response.data) {
       throw error.response.data;
     } else {
-      throw error;
+      handleApiError(error);
     }
   }
 

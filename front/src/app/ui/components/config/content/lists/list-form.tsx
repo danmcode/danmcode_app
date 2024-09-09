@@ -12,6 +12,7 @@ import { DropDownList } from "@/app/lib/domain/entities/dropdown-list.entity";
 // Esquema de validación con Zod
 const dropDownListSchema = z.object({
   list_name: z.string().min(1, "El nombre de la lista es obligatorio"),
+  list_name_id: z.string().optional(),
 });
 
 type DropDownListFormData = z.infer<typeof dropDownListSchema>;
@@ -36,7 +37,7 @@ const ListForm: React.FC<ListFormProps> = ({
     resolver: zodResolver(dropDownListSchema),
     defaultValues: { 
       list_name: initialName,
-      ...(isEdit && { list_name_id: dropDownList?.id })
+
     },
   });
 
@@ -44,8 +45,7 @@ const ListForm: React.FC<ListFormProps> = ({
     try {
       
       if(isEdit){
-        console.log(dropDownList?.id);
-        await DropDownList.edit(data);
+        const response = await DropDownList.edit(data);
         onSuccess();
       }
 
@@ -86,6 +86,16 @@ const ListForm: React.FC<ListFormProps> = ({
               {errors.list_name.message}
             </span>
           )}
+
+          {
+            isEdit 
+            ? <input 
+                hidden 
+                value={dropDownList?.id}
+                {...register("list_name_id")}
+              /> : <></>
+          }
+          
         </Col>
 
         <Modal.Footer>

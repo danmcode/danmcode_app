@@ -1,6 +1,6 @@
 import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { UUID } from "crypto";
-import { fetchResource } from "../../infraestructure/api.endpoints";
+import {  postResource } from "../../infraestructure/api.endpoints";
 
 
 interface RolData {
@@ -26,7 +26,7 @@ export class Rol {
     }
 
     static async getAll() {
-        const data = await fetchResource('roles');
+        const data = await postResource('roles');
 
         return data['roles'].map((roleData: any) => new Rol({
             id: roleData.id,
