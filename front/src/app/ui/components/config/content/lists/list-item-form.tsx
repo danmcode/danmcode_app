@@ -62,7 +62,6 @@ const ListItemForm: React.FC<ListFormProps> = ({
       }
 
       if(isSearch) {
-
         await DropDownList.search(data);
         onSuccess();
       }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,35 +10,35 @@ interface ListItemProps {
     onEdit: (id: string) => void;
     onDelete: (id: string) => void;
     onClick: (id: string) => void;
+    selectedId?: string; 
 }
 
-export default function ListItem({ id, text, onEdit, onDelete, onClick }: ListItemProps) {
-
+export default function ListItem({ id, text, onEdit, onDelete, onClick, selectedId = ''}: ListItemProps) {
     const [showButtons, setShowButtons] = useState(false);
 
     return (
-        <li className='config-dropdown-item list-group-item'
+        <li className={`config-dropdown-item list-group-item ${(selectedId && selectedId === id ) ? 'fw-bold bg-light' : ''}`}
             onMouseEnter={() => setShowButtons(true)}
             onMouseLeave={() => setShowButtons(false)}
             onClick={(e) => { e.stopPropagation(); onClick(id); }}
-            id={id.toString()}
+            id={id}
         >
             <span className='text-sm'>{text}</span>
             {showButtons && (
                 <div>
                     <button className='btn btn-sm'
-                        onClick={ (e) => { e.stopPropagation(); onEdit(id); } }
+                        onClick={(e) => { e.stopPropagation(); onEdit(id); }}
                     >
                         <FontAwesomeIcon className='text-primary'
                             icon={faPencilAlt}
-                        ></FontAwesomeIcon>
+                        />
                     </button>
                     <button className='btn btn-sm'
-                        onClick={ (e) => { e.stopPropagation(); onDelete(id); } }
+                        onClick={(e) => { e.stopPropagation(); onDelete(id); }}
                     >
                         <FontAwesomeIcon className='text-danger'
                             icon={faTrashAlt}
-                        ></FontAwesomeIcon>
+                        />
                     </button>
                 </div>
             )}

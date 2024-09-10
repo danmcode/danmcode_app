@@ -61,13 +61,7 @@ export default function DropDownContent() {
     };
 
     const handleClick = async (id: string) => {
-        const listItem = dropDowns!.find(item => item.id === id);
-        if (listItem) {
-            const response = listItem['dropdown_list_items'];
-            const items = response?.map((itemData: any) => new DropDownListItem(itemData));
-            setCurrentList(listItem);
-            setSelectedItems(items ?? []);
-        }
+        fetchDropDownItems(id);
     };
 
     const handleAddItem = () => {
@@ -75,7 +69,7 @@ export default function DropDownContent() {
         setModalContent(
             <ListItemForm
                 dropDownList={currentList!}
-                onSuccess={handleSuccess}
+                onSuccess={handleSuccessItem}
                 onCancel={handleClose}
             />
         );
@@ -119,6 +113,7 @@ export default function DropDownContent() {
                 onEdit={() => handleEdit(item)}
                 onClick={() => handleClick(item.id)}
                 onDelete={() => handleDelete(item)}
+                selectedId={currentList?.id}
             />
         ));
     };
@@ -140,10 +135,11 @@ export default function DropDownContent() {
             <ListItem
                 key={item.id}
                 id={item.id}
-                text={item.list_item_name}
+                text={`${item.list_item_name} - ${item.description}`}
                 onEdit={() => handleEditItem(item)}
                 onClick={() => ''}
                 onDelete={() => handleDeleteItem(item.id)}
+                selectedId={currentList?.id}
             />
         ));
     }
@@ -160,12 +156,35 @@ export default function DropDownContent() {
         }
     }
 
+    const fetchDropDownItems = (id: string) => {
+        try {
+            const listItem = dropDowns!.find(item => item.id === id);
+            if (listItem) {
+                const response = listItem['dropdown_list_items'];
+                const items = response?.map((itemData: any) => new DropDownListItem(itemData));
+                setCurrentList(listItem);
+                setSelectedItems([...items!] ?? []);
+            }
+        } catch (error) {
+            console.error('Failed to fetch dropDownsItems', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchDropDown();
     }, []);
 
     const handleSuccess = () => {
         fetchDropDown();
+        setShowModal(false);
+    };
+
+    const handleSuccessItem = () => {
+        setLoading(true)
+        fetchDropDown();
+        fetchDropDownItems(currentList!.id);
         setShowModal(false);
     };
 
@@ -207,7 +226,7 @@ export default function DropDownContent() {
                                 </div>
                                 <div className="d-flex justify-content-end col-2">
                                     <button
-                                        className="btn btn-sm btn-primary"
+                                        className={`btn btn-sm btn-primary ${currentList ? '' : 'disabled'}`}
                                         onClick={handleAddItem}
                                     >
                                         <i className="fas fa-plus"></i>
